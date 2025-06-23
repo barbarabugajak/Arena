@@ -75,7 +75,6 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 void APlayerCharacter::CameraRotation(const FInputActionValue& Value)
 {
 	FVector Val = Value.Get<FVector>();
-	AddControllerPitchInput(Val.Y);
 	AddControllerYawInput(Val.X);
 }
 
@@ -99,6 +98,27 @@ void APlayerCharacter::MoveRight(const FInputActionValue& Value)
 		const FRotator Rot(0, GetControlRotation().Yaw, 0);
 		const FVector Direction = FRotationMatrix(Rot).GetUnitAxis(EAxis::Y);
 		AddMovementInput(Direction, RightValue);
+	}
+}
+
+void APlayerCharacter::MeleeAttack()
+{
+	TArray<FHitResult> HitResults;
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(this);
+	
+	bool bHit = GetWorld()->SweepMultiByChannel(
+	HitResults,
+	GetActorLocation(),
+	GetActorLocation() + FVector(100, 100, 10),
+	FQuat::Identity,
+	ECC_Visibility,
+	FCollisionShape::MakeSphere(100),
+	Params);
+
+	if (bHit)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Hit something"));
 	}
 }
 

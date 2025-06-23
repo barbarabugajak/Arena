@@ -56,4 +56,15 @@ public:
 
 	UFUNCTION()
 	void MoveRight(const FInputActionValue& Value);
+
+	// Attack
+	UFUNCTION()
+	void MeleeAttack();
+
+	// Stats
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	float Health;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	float MaxHealth;
+	
 };
