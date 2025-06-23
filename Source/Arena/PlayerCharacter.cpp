@@ -105,6 +105,7 @@ void APlayerCharacter::MoveRight(const FInputActionValue& Value)
 
 void APlayerCharacter::MeleeAttack()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Attacking!"))
 	TArray<AActor*> Enemies = EnemiesNearby(100.0f); // Seems about right :)
 
 	if (Enemies.Num() > 0)
@@ -133,6 +134,5 @@ TArray<AActor*> APlayerCharacter::EnemiesNearby(float Distance)
 		HitResults);
 
 	DrawDebugSphere(GetWorld(), GetActorLocation(), Distance, 20, FColor::Yellow, true);
-	
 	return HitResults;
 }
