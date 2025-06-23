@@ -34,6 +34,9 @@ public:
 	UCameraComponent* CameraComp;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
 	USpringArmComponent* SpringArm; // I'm a fan now
+
+	UFUNCTION()
+	void CameraRotation(const FInputActionValue& Value);
 	
 	// Movement
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
@@ -45,6 +48,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	UInputAction* IA_Right;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+	UInputAction* IA_Camera;
+	
 	UFUNCTION()
 	void MoveForward(const FInputActionValue& Value);
 

@@ -17,10 +17,16 @@ APlayerCharacter::APlayerCharacter()
 
 	CameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComp"));
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
+	CameraComp->bUsePawnControlRotation = false;
 
 	SpringArm->SetupAttachment(GetCapsuleComponent());
 	CameraComp->AttachToComponent(SpringArm, FAttachmentTransformRules::KeepRelativeTransform);
+	
+	SpringArm->bUsePawnControlRotation = true;
 	SpringArm->TargetArmLength = 300.0f;
+	
+	bUseControllerRotationYaw = true;
+	GetCharacterMovement()->bOrientRotationToMovement = false;
 }
 
 // Called when the game starts or when spawned
@@ -59,11 +65,20 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	
 	if (UEnhancedInputComponent* EnhancedInput = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
+		EnhancedInput->BindAction(IA_Camera, ETriggerEvent::Triggered, this, &APlayerCharacter::CameraRotation);
 		EnhancedInput->BindAction(IA_Forward, ETriggerEvent::Triggered, this, &APlayerCharacter::MoveForward);
 		EnhancedInput->BindAction(IA_Right, ETriggerEvent::Triggered, this, &APlayerCharacter::MoveRight);
 	}
 
 }
+
+void APlayerCharacter::CameraRotation(const FInputActionValue& Value)
+{
+	FVector Val = Value.Get<FVector>();
+	AddControllerPitchInput(Val.Y);
+	AddControllerYawInput(Val.X);
+}
+
 
 void APlayerCharacter::MoveForward(const FInputActionValue& Value)
 {
