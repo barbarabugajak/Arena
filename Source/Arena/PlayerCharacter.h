@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "EnemyBase.h"
 #include "GameFramework/Character.h"
 #include "EnhancedInputSubsystems.h"
 #include "Camera/CameraComponent.h"
@@ -59,7 +60,13 @@ public:
 
 	// Attack
 	UFUNCTION()
+	TArray<AActor*> EnemiesNearby(float Distance);
+	
+	UFUNCTION()
 	void MeleeAttack();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
+	UInputAction* IA_Attack;
 
 	// Stats
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")

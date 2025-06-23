@@ -7,6 +7,7 @@
 #include "InputMappingContext.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 
 // Sets default values
@@ -68,6 +69,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInput->BindAction(IA_Camera, ETriggerEvent::Triggered, this, &APlayerCharacter::CameraRotation);
 		EnhancedInput->BindAction(IA_Forward, ETriggerEvent::Triggered, this, &APlayerCharacter::MoveForward);
 		EnhancedInput->BindAction(IA_Right, ETriggerEvent::Triggered, this, &APlayerCharacter::MoveRight);
+		EnhancedInput->BindAction(IA_Attack, ETriggerEvent::Triggered, this, &APlayerCharacter::MeleeAttack);
 	}
 
 }
@@ -103,22 +105,34 @@ void APlayerCharacter::MoveRight(const FInputActionValue& Value)
 
 void APlayerCharacter::MeleeAttack()
 {
-	TArray<FHitResult> HitResults;
-	FCollisionQueryParams Params;
-	Params.AddIgnoredActor(this);
-	
-	bool bHit = GetWorld()->SweepMultiByChannel(
-	HitResults,
-	GetActorLocation(),
-	GetActorLocation() + FVector(100, 100, 10),
-	FQuat::Identity,
-	ECC_Visibility,
-	FCollisionShape::MakeSphere(100),
-	Params);
+	TArray<AActor*> Enemies = EnemiesNearby(100.0f); // Seems about right :)
 
-	if (bHit)
+	if (Enemies.Num() > 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Hit something"));
 	}
 }
 
+TArray<AActor*> APlayerCharacter::EnemiesNearby(float Distance)
+{
+	TArray<AActor*> HitResults;
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(this);
+	TArray < TEnumAsByte < EObjectTypeQuery > > ObjectTypes;
+	TArray<AActor*> IgnoredActors;
+	IgnoredActors.Add(Cast<AActor>(this));
+	ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn)); // Pawn collision channel
+	
+	bool bIsPlayerNear = UKismetSystemLibrary::SphereOverlapActors(
+		GetWorld(),
+		GetActorLocation(),
+		Distance,
+		ObjectTypes,
+		AEnemyBase::StaticClass(),
+		IgnoredActors,
+		HitResults);
+
+	DrawDebugSphere(GetWorld(), GetActorLocation(), Distance, 20, FColor::Yellow, true);
+	
+	return HitResults;
+}
