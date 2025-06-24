@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DamageInterface.h"
 #include "GameFramework/Character.h"
 #include "EnemyBase.generated.h"
 
@@ -36,13 +37,11 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	float MaxHealth;
-
-	UFUNCTION()
-	virtual void CauseDamage(AActor* OtherActor);
+	
 
 	UFUNCTION()
 	virtual void TakeSomeDamage(float DamageAmount, bool bIsMagicalDamage);
 
 	UFUNCTION()
-	bool bIsPlayerNearby(float Distance);
+	TArray<AActor*> bIsPlayerNearby(float Distance);
 };

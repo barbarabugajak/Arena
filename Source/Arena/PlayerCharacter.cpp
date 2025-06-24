@@ -7,6 +7,7 @@
 #include "InputMappingContext.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 
@@ -125,9 +126,9 @@ void APlayerCharacter::MeleeAttack()
 	{
 		for (AActor* EnemyHit: Enemies)
 		{
-			if (AEnemyBase* Enemy = Cast<AEnemyBase>(EnemyHit))
+			if (IDamageInterface* HitActor = Cast<IDamageInterface>(EnemyHit))
 			{
-				Enemy->TakeSomeDamage(10, false);
+				HitActor->ReceiveDamage(10.0f, "Melee");
 			}
 		}
 	}
@@ -150,6 +151,25 @@ void APlayerCharacter::StopBlocking(const FInputActionValue& Value)
 	bIsBlocking = false;
 	BlockChanged.Broadcast();
 
+}
+
+
+void APlayerCharacter::ReceiveDamage(float DamageAmount, FString DamageType)
+{
+	if (DamageAmount > 0)
+	{
+		Health -= DamageAmount;
+	}
+	if (Health <= 0)
+	{
+		// For now
+		UKismetSystemLibrary::QuitGame(GetWorld(), UGameplayStatics::GetPlayerController(GetWorld(), 0), EQuitPreference::Quit, false);
+	}
+}
+void APlayerCharacter::CauseDamageToAnotherActor(AActor* OtherActor, float DamageAmount, FString DamageType)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Damage: %f"), DamageAmount);
+	return ;
 }
 
 

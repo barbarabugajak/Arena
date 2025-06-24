@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DamageInterface.h"
 #include "EnemyBase.h"
 #include "GameFramework/Character.h"
 #include "EnhancedInputSubsystems.h"
@@ -11,7 +12,7 @@
 #include "PlayerCharacter.generated.h"
 
 UCLASS()
-class ARENA_API APlayerCharacter : public ACharacter
+class ARENA_API APlayerCharacter : public ACharacter, public IDamageInterface
 {
 	GENERATED_BODY()
 
@@ -100,4 +101,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wizard Components")
 	UInputAction* IA_Shield;
+
+	// Damage
+	virtual void ReceiveDamage(float DamageAmount, FString DamageType) override;
+	virtual void CauseDamageToAnotherActor(AActor* OtherActor, float DamageAmount, FString DamageType) override;
 };

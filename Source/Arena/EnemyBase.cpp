@@ -37,11 +37,6 @@ void AEnemyBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 }
 
-void AEnemyBase::CauseDamage(AActor* OtherActor)
-{
-	
-}
-
 void AEnemyBase::TakeSomeDamage(float DamageAmount, bool bIsMagicalDamage)
 {
 	if (DamageAmount > 0)
@@ -54,7 +49,7 @@ void AEnemyBase::TakeSomeDamage(float DamageAmount, bool bIsMagicalDamage)
 	}
 }
 
-bool AEnemyBase::bIsPlayerNearby(float Distance)
+TArray<AActor*> AEnemyBase::bIsPlayerNearby(float Distance)
 {
 	TArray<AActor*> HitResults;
 	FCollisionQueryParams Params;
@@ -73,6 +68,6 @@ bool AEnemyBase::bIsPlayerNearby(float Distance)
 		IgnoredActors,
 		HitResults);
 	
-	return bIsPlayerNear;
+	return HitResults;
 }
 
