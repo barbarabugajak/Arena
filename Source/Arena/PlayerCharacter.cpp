@@ -4,6 +4,7 @@
 #include "PlayerCharacter.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "MagicRay.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -47,8 +48,6 @@ void APlayerCharacter::BeginPlay()
 	{
 		UE_LOG(LogTemp, Error, TEXT("Shield not accessible"));
 	}
-	
-
 }
 
 // Called every frame
@@ -83,6 +82,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInput->BindAction(IA_Attack, ETriggerEvent::Triggered, this, &APlayerCharacter::MeleeAttack);
 		EnhancedInput->BindAction(IA_Shield, ETriggerEvent::Started, this, &APlayerCharacter::StartBlocking);
 		EnhancedInput->BindAction(IA_Shield, ETriggerEvent::Completed, this, &APlayerCharacter::StopBlocking);
+		EnhancedInput->BindAction(IA_MagicRay, ETriggerEvent::Triggered, this, &APlayerCharacter::MagicRayAttack);
 	}
 
 }
@@ -132,6 +132,33 @@ void APlayerCharacter::MeleeAttack()
 		}
 	}
 }
+
+void APlayerCharacter::MagicRayAttack()
+{
+	if (bCanMagicRayAttack)
+	{
+		UE_LOG(LogTemp, Log, TEXT("Magic Ray Attack!"))
+		TArray<AActor*> Enemies = EnemiesNearby(400.0f);
+		if (Enemies.Num() > 0)
+		{
+			if (Enemies[0]->IsValidLowLevel())
+			{
+				GetWorld()->SpawnActor<AMagicRay>(MyBPClass, Enemies[0]->GetActorLocation(), FRotator::ZeroRotator);
+				bCanMagicRayAttack = false;
+				
+				FTimerHandle TimerHandle;
+				// Cooldown
+				GetWorld()->GetTimerManager().SetTimer(
+				TimerHandle,
+				[this]()
+				{
+					bCanMagicRayAttack = true;
+				}, 3.0f, false);
+			}
+		}
+	}
+}
+
 
 void APlayerCharacter::StartBlocking(const FInputActionValue& Value)
 {

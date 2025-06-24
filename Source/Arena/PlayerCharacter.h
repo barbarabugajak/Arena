@@ -69,6 +69,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	UInputAction* IA_Attack;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
+	UInputAction* IA_MagicRay;
+
+	UFUNCTION()
+	void MagicRayAttack();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
+	TSubclassOf<AActor> MyBPClass;
+
+	bool bCanMagicRayAttack = true;
+	
 	// Block
 	UFUNCTION()
 	void StartBlocking(const FInputActionValue& Value);

@@ -50,7 +50,8 @@ void APurpleWizard::Tick(float DeltaTime)
 void APurpleWizard::Melee()
 {
 	bIsAttacking = true;
-	CauseDamageToAnotherActor(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0), 10, "Melee");
+	UE_LOG(LogTemp, Warning, TEXT("Melee"));
+	CauseDamageToAnotherActor(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0), 2, "Melee");
 	// Reminder for a timer later
 	bIsAttacking = false;
 	FTimerHandle TimerHandle;
@@ -62,7 +63,7 @@ void APurpleWizard::Melee()
 		[this]()
 		{
 			bCanMeleeAttack = true;
-		}, 3.0f, false);
+		}, 2.0f, false);
 }
 
 
