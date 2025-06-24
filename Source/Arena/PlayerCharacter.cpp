@@ -4,7 +4,6 @@
 #include "PlayerCharacter.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
-#include "InputMappingContext.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -156,14 +155,17 @@ void APlayerCharacter::StopBlocking(const FInputActionValue& Value)
 
 void APlayerCharacter::ReceiveDamage(float DamageAmount, FString DamageType)
 {
-	if (DamageAmount > 0)
+	if (!bIsBlocking)
 	{
-		Health -= DamageAmount;
-	}
-	if (Health <= 0)
-	{
-		// For now
-		UKismetSystemLibrary::QuitGame(GetWorld(), UGameplayStatics::GetPlayerController(GetWorld(), 0), EQuitPreference::Quit, false);
+		if (DamageAmount > 0)
+		{
+			Health -= DamageAmount;
+		}
+		if (Health <= 0)
+		{
+			// For now
+			UKismetSystemLibrary::QuitGame(GetWorld(), UGameplayStatics::GetPlayerController(GetWorld(), 0), EQuitPreference::Quit, false);
+		}
 	}
 }
 void APlayerCharacter::CauseDamageToAnotherActor(AActor* OtherActor, float DamageAmount, FString DamageType)

@@ -101,7 +101,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wizard Components")
 	UInputAction* IA_Shield;
-
+	
 	// Damage
 	virtual void ReceiveDamage(float DamageAmount, FString DamageType) override;
 	virtual void CauseDamageToAnotherActor(AActor* OtherActor, float DamageAmount, FString DamageType) override;

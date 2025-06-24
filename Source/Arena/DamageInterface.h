@@ -23,6 +23,5 @@ class ARENA_API IDamageInterface
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 	public:
 		virtual void ReceiveDamage(float DamageAmount, FString DamageType);
-	
 		virtual void CauseDamageToAnotherActor(AActor* OtherActor, float DamageAmount, FString DamageType);
 };

@@ -26,7 +26,8 @@ void APurpleWizard::Tick(float DeltaTime)
 	if (AIController->IsFollowingAPath() == false)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Followin a path"));
-		AIController->MoveToLocation(PlayerCharacter->GetActorLocation());
+		FVector SomeRandomnessToMovement = FVector(FMath::RandRange(-10, 10), FMath::RandRange(-10, 10), 0);
+		AIController->MoveToLocation(PlayerCharacter->GetActorLocation()+SomeRandomnessToMovement, 40);
 		AIController->SetFocus(PlayerCharacter);
 	}
 	
