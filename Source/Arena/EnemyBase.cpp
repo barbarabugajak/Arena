@@ -44,7 +44,14 @@ void AEnemyBase::CauseDamage(AActor* OtherActor)
 
 void AEnemyBase::TakeSomeDamage(float DamageAmount, bool bIsMagicalDamage)
 {
-	
+	if (DamageAmount > 0)
+	{
+		Health -= DamageAmount;
+	}
+	if (Health <= 0)
+	{
+		Destroy();
+	}
 }
 
 bool AEnemyBase::bIsPlayerNearby(float Distance)

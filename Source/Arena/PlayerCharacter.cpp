@@ -110,7 +110,13 @@ void APlayerCharacter::MeleeAttack()
 
 	if (Enemies.Num() > 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Hit something"));
+		for (AActor* EnemyHit: Enemies)
+		{
+			if (AEnemyBase* Enemy = Cast<AEnemyBase>(EnemyHit))
+			{
+				Enemy->TakeSomeDamage(10, false);
+			}
+		}
 	}
 }
 
