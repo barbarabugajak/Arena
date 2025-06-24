@@ -128,7 +128,7 @@ void APlayerCharacter::MeleeAttack()
 		{
 			if (IDamageInterface* HitActor = Cast<IDamageInterface>(EnemyHit))
 			{
-				HitActor->ReceiveDamage(10.0f, "Melee");
+				HitActor->ReceiveDamage(5.0f, "Melee");
 			}
 		}
 	}
