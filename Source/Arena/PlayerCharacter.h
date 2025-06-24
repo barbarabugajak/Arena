@@ -68,10 +68,36 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	UInputAction* IA_Attack;
 
+	// Block
+	UFUNCTION()
+	void StartBlocking(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void StopBlocking(const FInputActionValue& Value);
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBlockingStateChanged);
+	UPROPERTY(BlueprintAssignable, Category = "Blocking")
+	FOnBlockingStateChanged BlockChanged;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Blocking")
+	float MaxBlock = 50.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Blocking")
+	float BlockMeter;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Blocking")
+	bool bIsBlocking = false;
+	
 	// Stats
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	float Health;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	float MaxHealth;
-	
+
+	// Wizard Comps
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wizard Components")
+	UStaticMeshComponent* ShieldComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wizard Components")
+	UInputAction* IA_Shield;
 };

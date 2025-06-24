@@ -15,7 +15,8 @@ APlayerCharacter::APlayerCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	
+	// Camera
 	CameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComp"));
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	CameraComp->bUsePawnControlRotation = false;
@@ -28,6 +29,10 @@ APlayerCharacter::APlayerCharacter()
 	
 	bUseControllerRotationYaw = true;
 	GetCharacterMovement()->bOrientRotationToMovement = false;
+
+	// Components
+	ShieldComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Shield"));
+	ShieldComponent->SetupAttachment(GetCapsuleComponent());
 }
 
 // Called when the game starts or when spawned
@@ -35,8 +40,14 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
-	UE_LOG(LogTemp, Warning, TEXT("MovementMode: %d"), GetCharacterMovement()->MovementMode);
-
+	if (ShieldComponent != nullptr)
+	{
+		ShieldComponent->SetVisibility(false, true);	
+	} else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Shield not accessible"));
+	}
+	
 
 }
 
@@ -70,6 +81,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInput->BindAction(IA_Forward, ETriggerEvent::Triggered, this, &APlayerCharacter::MoveForward);
 		EnhancedInput->BindAction(IA_Right, ETriggerEvent::Triggered, this, &APlayerCharacter::MoveRight);
 		EnhancedInput->BindAction(IA_Attack, ETriggerEvent::Triggered, this, &APlayerCharacter::MeleeAttack);
+		EnhancedInput->BindAction(IA_Shield, ETriggerEvent::Started, this, &APlayerCharacter::StartBlocking);
+		EnhancedInput->BindAction(IA_Shield, ETriggerEvent::Completed, this, &APlayerCharacter::StopBlocking);
 	}
 
 }
@@ -119,6 +132,26 @@ void APlayerCharacter::MeleeAttack()
 		}
 	}
 }
+
+void APlayerCharacter::StartBlocking(const FInputActionValue& Value)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Starting Blocking!"));
+	bIsBlocking = true;
+	// Hide the component
+	ShieldComponent->SetVisibility(true, true);
+
+	BlockChanged.Broadcast();
+}
+
+void APlayerCharacter::StopBlocking(const FInputActionValue& Value)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Ending Blocking!"));
+	ShieldComponent->SetVisibility(false, true);
+	bIsBlocking = false;
+	BlockChanged.Broadcast();
+
+}
+
 
 TArray<AActor*> APlayerCharacter::EnemiesNearby(float Distance)
 {
