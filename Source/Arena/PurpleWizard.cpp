@@ -41,6 +41,7 @@ void APurpleWizard::Tick(float DeltaTime)
 				if (Player)
 				{
 					// Melee Attack
+					UE_LOG(LogTemp, Warning, TEXT("PurpleWizard Starting Melee Attack"));
 					Melee();
 				}
 			}
@@ -50,13 +51,14 @@ void APurpleWizard::Tick(float DeltaTime)
 void APurpleWizard::Melee()
 {
 	bIsAttacking = true;
-	UE_LOG(LogTemp, Warning, TEXT("Melee"));
-	CauseDamageToAnotherActor(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0), 2, "Melee");
-	// Reminder for a timer later
-	bIsAttacking = false;
+	DrawDebugBox(GetWorld(), GetActorLocation(), FVector(100.0f, 100.0f, 100.0f), FColor::Cyan);
+	APlayerCharacter* Player =  Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+
+	UE_LOG(LogTemp, Log, TEXT("Melee"))
+	
+	CauseDamageToAnotherActor(Player, 2, "Melee");
+
 	FTimerHandle TimerHandle;
-	bCanMeleeAttack = false;
-	UE_LOG(LogTemp, Warning, TEXT("Attacking"));
 	// Cooldown
 	GetWorld()->GetTimerManager().SetTimer(
 		TimerHandle,
@@ -74,7 +76,7 @@ void APurpleWizard::CauseDamageToAnotherActor(AActor* OtherActor, float DamageAm
 	{
 		if (IDamageInterface* DamageTarget = Cast<IDamageInterface>(OtherActor))
 		{
-			DamageTarget->CauseDamageToAnotherActor(this, DamageAmount, DamageType);
+			DamageTarget->ReceiveDamage(DamageAmount, DamageType);
 		}
 	}
 }
