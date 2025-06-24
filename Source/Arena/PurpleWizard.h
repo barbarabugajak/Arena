@@ -29,4 +29,5 @@ class ARENA_API APurpleWizard : public AEnemyBase, public IDamageInterface
 		virtual void CauseDamageToAnotherActor(AActor* OtherActor, float DamageAmount, FString DamageType) override;
 	
 		float Health = 10.0f;
+
 };

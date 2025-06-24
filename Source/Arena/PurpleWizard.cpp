@@ -2,7 +2,7 @@
 
 
 #include "PurpleWizard.h"
-
+#include "AIController.h"
 #include "PlayerCharacter.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -10,27 +10,40 @@ APurpleWizard::APurpleWizard()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	
+	// AI Possess
+	AIControllerClass = AAIController::StaticClass();
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+
 }
 
 void APurpleWizard::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (bCanMeleeAttack && !bIsAttacking)
-	{
-		TArray<AActor*> OverlappingActors = bIsPlayerNearby(100.0f);
+	AAIController* AIController = Cast<AAIController>(GetController());
+	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 
-		if (OverlappingActors.Num() > 0)
+	if (AIController->IsFollowingAPath() == false)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Followin a path"));
+		AIController->MoveToLocation(PlayerCharacter->GetActorLocation());
+		AIController->SetFocus(PlayerCharacter);
+	}
+	
+		if (bCanMeleeAttack && !bIsAttacking)
 		{
-			APlayerCharacter* Player = Cast<APlayerCharacter>(OverlappingActors[0]); // Well, there's only one player
-			if (Player)
+			TArray<AActor*> OverlappingActors = bIsPlayerNearby(100.0f);
+
+			if (OverlappingActors.Num() > 0)
 			{
-				// Melee Attack
-				Melee();
+				APlayerCharacter* Player = Cast<APlayerCharacter>(OverlappingActors[0]); // Well, there's only one player
+				if (Player)
+				{
+					// Melee Attack
+					Melee();
+				}
 			}
-		}
-	} 
+		} 
 }
 
 void APurpleWizard::Melee()
@@ -41,7 +54,7 @@ void APurpleWizard::Melee()
 	bIsAttacking = false;
 	FTimerHandle TimerHandle;
 	bCanMeleeAttack = false;
-
+	UE_LOG(LogTemp, Warning, TEXT("Attacking"));
 	// Cooldown
 	GetWorld()->GetTimerManager().SetTimer(
 		TimerHandle,
