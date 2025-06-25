@@ -83,6 +83,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInput->BindAction(IA_Shield, ETriggerEvent::Started, this, &APlayerCharacter::StartBlocking);
 		EnhancedInput->BindAction(IA_Shield, ETriggerEvent::Completed, this, &APlayerCharacter::StopBlocking);
 		EnhancedInput->BindAction(IA_MagicRay, ETriggerEvent::Triggered, this, &APlayerCharacter::MagicRayAttack);
+		EnhancedInput->BindAction(IA_MagicProjectile, ETriggerEvent::Triggered, this, &APlayerCharacter::LaunchMagicProjectile);
 	}
 
 }
@@ -182,6 +183,33 @@ void APlayerCharacter::MagicRayAttack()
 	}
 }
 
+void APlayerCharacter::LaunchMagicProjectile()
+{
+	
+	if (bCanProjectileAttack && MagicProjectile_BPClass->IsValidLowLevel()) 
+	{
+		TArray<AActor*> Enemies = EnemiesNearby(800.0f);
+		if (Enemies.Num() > 0)
+		{
+			if (Enemies[0]->IsValidLowLevel())
+			{
+				FVector ProjectileAim = Enemies[0]->GetActorLocation();
+
+				FActorSpawnParameters SpawnParams;
+				SpawnParams.Owner = this;
+
+				FVector Location = GetMesh()->GetSocketLocation("Weapon");
+				
+				DrawDebugBox(GetWorld(),Location, FVector(10.0f, 10.0f, 10.0f), FColor::Red, true, 1000.0f );
+				GetWorld()->SpawnActor<AMagicProjectile>(MagicProjectile_BPClass, Location, GetActorRotation(), SpawnParams);
+				 
+				
+			}
+		}
+		
+	}
+}
+
 
 void APlayerCharacter::StartBlocking(const FInputActionValue& Value)
 {
@@ -236,6 +264,8 @@ TArray<AActor*> APlayerCharacter::EnemiesNearby(float Distance)
 	TArray<AActor*> IgnoredActors;
 	IgnoredActors.Add(Cast<AActor>(this));
 	ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn)); // Pawn collision channel
+
+	FVector Location = GetActorLocation() + (GetActorForwardVector()*Distance);
 	
 	bool bIsPlayerNear = UKismetSystemLibrary::SphereOverlapActors(
 		GetWorld(),
@@ -246,6 +276,6 @@ TArray<AActor*> APlayerCharacter::EnemiesNearby(float Distance)
 		IgnoredActors,
 		HitResults);
 
-	DrawDebugSphere(GetWorld(), GetActorLocation(), Distance, 20, FColor::Yellow, true);
+	DrawDebugSphere(GetWorld(), Location, Distance, 20, FColor::Yellow, true);
 	return HitResults;
 }

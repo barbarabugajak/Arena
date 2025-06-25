@@ -7,6 +7,7 @@
 #include "EnemyBase.h"
 #include "GameFramework/Character.h"
 #include "EnhancedInputSubsystems.h"
+#include "MagicProjectile.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "PlayerCharacter.generated.h"
@@ -87,7 +88,20 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	TSubclassOf<AActor> MyBPClass;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	bool bCanMagicRayAttack = true;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
+	UInputAction* IA_MagicProjectile;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
+	TSubclassOf<AMagicProjectile> MagicProjectile_BPClass;
+
+	UFUNCTION()
+	void LaunchMagicProjectile();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
+	bool bCanProjectileAttack = true;
 	
 	// Block
 	UFUNCTION()
