@@ -23,11 +23,10 @@ class ARENA_API APurpleWizard : public AEnemyBase, public IDamageInterface
 	
 		// Damage
 		void Melee();
-		bool bIsAttacking = false;
 		bool bCanMeleeAttack = true;
 		virtual void ReceiveDamage(float DamageAmount, FString DamageType) override;
 		virtual void CauseDamageToAnotherActor(AActor* OtherActor, float DamageAmount, FString DamageType) override;
-	
+		virtual void EndMeleeAttack() override;
 		float Health = 10.0f;
 
 };

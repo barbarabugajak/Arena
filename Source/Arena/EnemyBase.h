@@ -34,11 +34,19 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	float MaxHealth;
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	bool bIsDead = false;
 
 	UFUNCTION()
 	virtual void TakeSomeDamage(float DamageAmount, bool bIsMagicalDamage);
 
 	UFUNCTION()
 	TArray<AActor*> bIsPlayerNearby(float Distance);
+
+	UFUNCTION()
+	virtual void EndMeleeAttack();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	bool bIsMeleeAttacking;
 };

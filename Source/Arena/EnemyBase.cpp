@@ -42,9 +42,16 @@ void AEnemyBase::TakeSomeDamage(float DamageAmount, bool bIsMagicalDamage)
 	}
 	if (Health <= 0)
 	{
-		Destroy();
+		bool bIsDead = true;
+		
 	}
 }
+
+void AEnemyBase::EndMeleeAttack()
+{
+	
+}
+
 
 TArray<AActor*> AEnemyBase::bIsPlayerNearby(float Distance)
 {

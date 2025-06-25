@@ -132,6 +132,7 @@ void APlayerCharacter::MeleeAttack()
 				if (IDamageInterface* HitActor = Cast<IDamageInterface>(EnemyHit))
 				{
 					HitActor->ReceiveDamage(5.0f, "Melee");
+
 				}
 			}
 		}
@@ -142,6 +143,7 @@ void APlayerCharacter::EndMeleeAttack()
 {
 	bIsMeleeAttacking = false;
 	FTimerHandle TimerHandle;
+
 	GetWorld()->GetTimerManager().SetTimer(
 		TimerHandle,
 		[this]()

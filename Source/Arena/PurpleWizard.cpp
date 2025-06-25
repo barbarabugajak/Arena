@@ -31,7 +31,7 @@ void APurpleWizard::Tick(float DeltaTime)
 		AIController->SetFocus(PlayerCharacter);
 	}
 	
-		if (bCanMeleeAttack && !bIsAttacking)
+		if (bCanMeleeAttack && !bIsMeleeAttacking)
 		{
 			TArray<AActor*> OverlappingActors = bIsPlayerNearby(100.0f);
 
@@ -50,13 +50,20 @@ void APurpleWizard::Tick(float DeltaTime)
 
 void APurpleWizard::Melee()
 {
-	bIsAttacking = true;
+	bIsMeleeAttacking = true;
 	DrawDebugBox(GetWorld(), GetActorLocation(), FVector(100.0f, 100.0f, 100.0f), FColor::Cyan);
 	APlayerCharacter* Player =  Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 
 	UE_LOG(LogTemp, Log, TEXT("Melee"))
 	
 	CauseDamageToAnotherActor(Player, 2, "Melee");
+	
+}
+
+
+void APurpleWizard::EndMeleeAttack()
+{
+	bIsMeleeAttacking = false;
 
 	FTimerHandle TimerHandle;
 	// Cooldown
@@ -65,7 +72,7 @@ void APurpleWizard::Melee()
 		[this]()
 		{
 			bCanMeleeAttack = true;
-		}, 2.0f, false);
+		}, 1.0f, false);
 }
 
 
