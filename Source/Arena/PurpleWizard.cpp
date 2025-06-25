@@ -16,6 +16,15 @@ APurpleWizard::APurpleWizard()
 
 }
 
+void APurpleWizard::BeginPlay()
+{
+	Super::BeginPlay();
+	Health = 15.0f;
+	MeleeAttackDelay = 1.2f;
+	bCanMeleeAttack = true;
+	bIsMeleeAttacking = false;
+}
+
 void APurpleWizard::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -33,70 +42,9 @@ void APurpleWizard::Tick(float DeltaTime)
 	
 		if (bCanMeleeAttack && !bIsMeleeAttacking)
 		{
-			TArray<AActor*> OverlappingActors = bIsPlayerNearby(100.0f);
-
-			if (OverlappingActors.Num() > 0)
-			{
-				APlayerCharacter* Player = Cast<APlayerCharacter>(OverlappingActors[0]); // Well, there's only one player
-				if (Player)
-				{
-					// Melee Attack
-					UE_LOG(LogTemp, Warning, TEXT("PurpleWizard Starting Melee Attack"));
-					Melee();
-				}
-			}
+			UE_LOG(LogTemp, Warning, TEXT("MeleeAttacking"));
+			Melee(100.0f, 2.0f);
 		} 
 }
 
-void APurpleWizard::Melee()
-{
-	bIsMeleeAttacking = true;
-	DrawDebugBox(GetWorld(), GetActorLocation(), FVector(100.0f, 100.0f, 100.0f), FColor::Cyan);
-	APlayerCharacter* Player =  Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 
-	UE_LOG(LogTemp, Log, TEXT("Melee"))
-	
-	CauseDamageToAnotherActor(Player, 2, "Melee");
-	
-}
-
-
-void APurpleWizard::EndMeleeAttack()
-{
-	bIsMeleeAttacking = false;
-
-	FTimerHandle TimerHandle;
-	// Cooldown
-	GetWorld()->GetTimerManager().SetTimer(
-		TimerHandle,
-		[this]()
-		{
-			bCanMeleeAttack = true;
-		}, 1.0f, false);
-}
-
-
-// Generic
-void APurpleWizard::CauseDamageToAnotherActor(AActor* OtherActor, float DamageAmount, FString DamageType)
-{
-	if (OtherActor != nullptr)
-	{
-		if (IDamageInterface* DamageTarget = Cast<IDamageInterface>(OtherActor))
-		{
-			DamageTarget->ReceiveDamage(DamageAmount, DamageType);
-		}
-	}
-}
-
-void APurpleWizard::ReceiveDamage(float DamageAmount, FString DamageType)
-{
-	if (DamageAmount > 0)
-	{
-		Health -= DamageAmount;
-	}
-	if (Health <= 0)
-	{
-		// For now
-		Destroy();
-	}
-}

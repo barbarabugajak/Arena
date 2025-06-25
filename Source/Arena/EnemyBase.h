@@ -8,7 +8,7 @@
 #include "EnemyBase.generated.h"
 
 UCLASS()
-class ARENA_API AEnemyBase : public ACharacter
+class ARENA_API AEnemyBase : public ACharacter, public IDamageInterface
 {
 	GENERATED_BODY()
 
@@ -38,15 +38,28 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	bool bIsDead = false;
 
-	UFUNCTION()
-	virtual void TakeSomeDamage(float DamageAmount, bool bIsMagicalDamage);
+	virtual void ReceiveDamage(float DamageAmount, FString DamageType) override;
+	
+	virtual void CauseDamageToAnotherActor(AActor* OtherActor, float DamageAmount, FString DamageType) override;
 
+	
+	
 	UFUNCTION()
 	TArray<AActor*> bIsPlayerNearby(float Distance);
 
 	UFUNCTION()
-	virtual void EndMeleeAttack();
+	void Melee(float Distance , float DamageAmount);
+	
+	UFUNCTION()
+	void EndMeleeAttack();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	float MeleeAttackDelay = 1.0f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	bool bIsMeleeAttacking;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	bool bCanMeleeAttack;
+	
 };

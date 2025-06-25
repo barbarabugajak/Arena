@@ -34,7 +34,7 @@ void AEnemyBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 }
 
-void AEnemyBase::TakeSomeDamage(float DamageAmount, bool bIsMagicalDamage)
+void AEnemyBase::ReceiveDamage(float DamageAmount, FString DamageType)
 {
 	if (DamageAmount > 0)
 	{
@@ -47,9 +47,51 @@ void AEnemyBase::TakeSomeDamage(float DamageAmount, bool bIsMagicalDamage)
 	}
 }
 
+void AEnemyBase::CauseDamageToAnotherActor(AActor* OtherActor, float DamageAmount, FString DamageType)
+{
+	if (OtherActor != nullptr)
+	{
+		if (IDamageInterface* DamageTarget = Cast<IDamageInterface>(OtherActor))
+		{
+			DamageTarget->ReceiveDamage(DamageAmount, DamageType);
+		}
+	}
+}
+
+
+void AEnemyBase::Melee(float Distance , float DamageAmount)
+{
+	if (bCanMeleeAttack && !bIsMeleeAttacking)
+	{
+		TArray<AActor*> OverlappingActors = bIsPlayerNearby(Distance);
+
+		if (OverlappingActors.Num() > 0)
+		{
+			APlayerCharacter* Player = Cast<APlayerCharacter>(OverlappingActors[0]); // Well, there's only one player
+			if (Player)
+			{
+				// Melee Attack
+				UE_LOG(LogTemp, Warning, TEXT("PurpleWizard Starting Melee Attack"));
+				bIsMeleeAttacking = true;
+				CauseDamageToAnotherActor(Player, DamageAmount, "Melee");
+			}
+		}
+	}
+}
+
+
 void AEnemyBase::EndMeleeAttack()
 {
-	
+	bIsMeleeAttacking = false;
+
+	FTimerHandle TimerHandle;
+	// Cooldown
+	GetWorld()->GetTimerManager().SetTimer(
+		TimerHandle,
+		[this]()
+		{
+			bCanMeleeAttack = true;
+		}, MeleeAttackDelay, false);
 }
 
 
