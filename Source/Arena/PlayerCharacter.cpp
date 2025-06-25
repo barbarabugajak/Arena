@@ -26,7 +26,7 @@ APlayerCharacter::APlayerCharacter()
 	CameraComp->AttachToComponent(SpringArm, FAttachmentTransformRules::KeepRelativeTransform);
 	
 	SpringArm->bUsePawnControlRotation = true;
-	SpringArm->TargetArmLength = 300.0f;
+	SpringArm->TargetArmLength = 400.0f;
 	
 	bUseControllerRotationYaw = true;
 	GetCharacterMovement()->bOrientRotationToMovement = false;
@@ -158,12 +158,15 @@ void APlayerCharacter::MagicRayAttack()
 	if (bCanMagicRayAttack)
 	{
 		UE_LOG(LogTemp, Log, TEXT("Magic Ray Attack!"))
-		TArray<AActor*> Enemies = EnemiesNearby(400.0f);
+		TArray<AActor*> Enemies = EnemiesNearby(600.0f);
 		if (Enemies.Num() > 0)
 		{
 			if (Enemies[0]->IsValidLowLevel())
 			{
-				GetWorld()->SpawnActor<AMagicRay>(MyBPClass, Enemies[0]->GetActorLocation(), FRotator::ZeroRotator);
+				// Add some randomness
+				FVector Location = Enemies[0]->GetActorLocation() + FVector(FMath::RandRange(-80, 80), FMath::RandRange(-80, 80), 0);;
+				
+				GetWorld()->SpawnActor<AMagicRay>(MyBPClass, Location, FRotator::ZeroRotator);
 				bCanMagicRayAttack = false;
 				
 				FTimerHandle TimerHandle;

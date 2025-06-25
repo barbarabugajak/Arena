@@ -36,13 +36,17 @@ void AEnemyBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 void AEnemyBase::ReceiveDamage(float DamageAmount, FString DamageType)
 {
+	
 	if (DamageAmount > 0)
 	{
 		Health -= DamageAmount;
+		UE_LOG(LogTemp, Warning, TEXT("Damage Amount: %f"), DamageAmount);
+		UE_LOG(LogTemp, Warning, TEXT("Health: %f"), Health);
 	}
 	if (Health <= 0)
 	{
 		bool bIsDead = true;
+		Destroy();
 		
 	}
 }
