@@ -118,20 +118,38 @@ void APlayerCharacter::MoveRight(const FInputActionValue& Value)
 
 void APlayerCharacter::MeleeAttack()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Attacking!"))
-	TArray<AActor*> Enemies = EnemiesNearby(100.0f); // Seems about right :)
-
-	if (Enemies.Num() > 0)
+	if (bCanMeleeAttack)
 	{
-		for (AActor* EnemyHit: Enemies)
+		bIsMeleeAttacking = true;
+		bCanMeleeAttack = false;
+		UE_LOG(LogTemp, Warning, TEXT("Attacking!"))
+		TArray<AActor*> Enemies = EnemiesNearby(100.0f); // Seems about right :)
+
+		if (Enemies.Num() > 0)
 		{
-			if (IDamageInterface* HitActor = Cast<IDamageInterface>(EnemyHit))
+			for (AActor* EnemyHit: Enemies)
 			{
-				HitActor->ReceiveDamage(5.0f, "Melee");
+				if (IDamageInterface* HitActor = Cast<IDamageInterface>(EnemyHit))
+				{
+					HitActor->ReceiveDamage(5.0f, "Melee");
+				}
 			}
 		}
 	}
 }
+
+void APlayerCharacter::EndMeleeAttack()
+{
+	bIsMeleeAttacking = false;
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(
+		TimerHandle,
+		[this]()
+		{
+			bCanMeleeAttack = true;
+		}, 1.5f, false);
+}
+
 
 void APlayerCharacter::MagicRayAttack()
 {

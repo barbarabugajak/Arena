@@ -66,6 +66,15 @@ public:
 	UFUNCTION()
 	void MeleeAttack();
 
+	UFUNCTION()
+	void EndMeleeAttack();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
+	bool bIsMeleeAttacking = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
+	bool bCanMeleeAttack = true;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	UInputAction* IA_Attack;
 
