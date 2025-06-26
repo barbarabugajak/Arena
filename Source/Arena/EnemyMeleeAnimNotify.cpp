@@ -11,6 +11,7 @@ void UEnemyMeleeAnimNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSequen
 
 	if (AEnemyBase* Enemy = Cast<AEnemyBase>(MeshComp->GetOwner()))
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Owner Name: %s"), *MeshComp->GetOwner()->GetName());
 		Enemy->EndMeleeAttack();
 	}
 }

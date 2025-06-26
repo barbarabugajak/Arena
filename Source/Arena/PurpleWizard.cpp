@@ -44,7 +44,7 @@ void APurpleWizard::Tick(float DeltaTime)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("MeleeAttacking"));
 			Melee(100.0f, 2.0f);
-		} 
+		}
 }
 
 

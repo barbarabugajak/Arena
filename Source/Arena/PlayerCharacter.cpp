@@ -202,7 +202,14 @@ void APlayerCharacter::LaunchMagicProjectile()
 				
 				DrawDebugBox(GetWorld(),Location, FVector(10.0f, 10.0f, 10.0f), FColor::Red, true, 1000.0f );
 				GetWorld()->SpawnActor<AMagicProjectile>(MagicProjectile_BPClass, Location, GetActorRotation(), SpawnParams);
-				 
+
+				bCanProjectileAttack = false;
+
+				FTimerHandle TimerHandle;
+				GetWorld()->GetTimerManager().SetTimer(TimerHandle, [this]()
+				{
+					bCanProjectileAttack = true;
+				}, 2.0f, false);
 				
 			}
 		}

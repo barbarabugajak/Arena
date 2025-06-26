@@ -78,6 +78,7 @@ void AEnemyBase::Melee(float Distance , float DamageAmount)
 				UE_LOG(LogTemp, Warning, TEXT("PurpleWizard Starting Melee Attack"));
 				bIsMeleeAttacking = true;
 				CauseDamageToAnotherActor(Player, DamageAmount, "Melee");
+				bCanMeleeAttack = false;
 			}
 		}
 	}
@@ -86,6 +87,7 @@ void AEnemyBase::Melee(float Distance , float DamageAmount)
 
 void AEnemyBase::EndMeleeAttack()
 {
+	UE_LOG(LogTemp, Warning, TEXT("End of Melee Attack"));
 	bIsMeleeAttacking = false;
 
 	FTimerHandle TimerHandle;
