@@ -3,6 +3,7 @@
 
 #include "EnemyBase.h"
 
+#include "MagicRay.h"
 #include "PlayerCharacter.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -24,6 +25,11 @@ void AEnemyBase::BeginPlay()
 void AEnemyBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (bCanMagicRayAttack)
+	{
+		MagicRayAttack(900.0f, 100.0f);
+	}
 
 }
 
@@ -109,6 +115,35 @@ void AEnemyBase::EndMeleeAttack()
 		}, MeleeAttackDelay, false);
 }
 
+void AEnemyBase::MagicRayAttack(float Range, float Disortion)
+{
+	if (bCanMagicRayAttack)
+	{
+		UE_LOG(LogTemp, Log, TEXT("Magic Ray Attack!"))
+		TArray<AActor*> Player = bIsPlayerNearby(Range);
+		if (Player.Num() > 0)
+		{
+			if (Player[0]->IsValidLowLevel())
+			{
+				// Add some randomness
+				FVector Location = Player[0]->GetActorLocation() + FVector(FMath::RandRange(-Disortion, Disortion), FMath::RandRange(-Disortion, Disortion), 0);;
+				
+				GetWorld()->SpawnActor<AMagicRay>(MyBPClass, Location, FRotator::ZeroRotator);
+				bCanMagicRayAttack = false;
+				
+				FTimerHandle TimerHandle;
+				// Cooldown
+				GetWorld()->GetTimerManager().SetTimer(
+				TimerHandle,
+				[this]()
+				{
+					bCanMagicRayAttack = true;
+				}, 3.0f, false);
+			}
+		}
+	}
+}
+
 
 TArray<AActor*> AEnemyBase::bIsPlayerNearby(float Distance)
 {
@@ -128,6 +163,8 @@ TArray<AActor*> AEnemyBase::bIsPlayerNearby(float Distance)
 		APlayerCharacter::StaticClass(),
 		IgnoredActors,
 		HitResults);
+
+	DrawDebugSphere(GetWorld(), GetActorLocation(), Distance, 32, FColor::Red, false, 10.0f);
 	
 	return HitResults;
 }

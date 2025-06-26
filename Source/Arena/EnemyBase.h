@@ -61,5 +61,13 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	bool bCanMeleeAttack;
-	
+
+	UFUNCTION()
+	void MagicRayAttack(float Range, float Disortion);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
+	TSubclassOf<AActor> MyBPClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
+	bool bCanMagicRayAttack = true;
 };
