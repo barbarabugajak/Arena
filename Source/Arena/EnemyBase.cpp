@@ -45,8 +45,17 @@ void AEnemyBase::ReceiveDamage(float DamageAmount, FString DamageType)
 	}
 	if (Health <= 0)
 	{
-		bool bIsDead = true;
-		Destroy();
+		bIsDead = true;
+
+		FTimerHandle TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(
+			TimerHandle,
+			[this]()
+			{
+				Destroy();
+			}, 2.0f, false);
+		
+		
 		
 	}
 }
