@@ -4,6 +4,7 @@
 #include "MagicProjectile.h"
 
 #include "DamageInterface.h"
+#include "PlayerCharacter.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
@@ -25,7 +26,7 @@ AMagicProjectile::AMagicProjectile()
 	ProjectileMovement->MaxSpeed = 2000.0f;
 	ProjectileMovement->ProjectileGravityScale = 0.0f;
 
-	CollisionComponent->OnComponentHit.AddDynamic(this, &AMagicProjectile::OnHit);
+
 
 	
 }
@@ -34,6 +35,9 @@ AMagicProjectile::AMagicProjectile()
 void AMagicProjectile::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	CollisionComponent->SetGenerateOverlapEvents(true);
+	CollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &AMagicProjectile::HandleOverlap);
 	
 }
 
@@ -51,18 +55,25 @@ void AMagicProjectile::LaunchTo(FVector WhereTo)
 	ProjectileMovement->Velocity = WhereTo * ProjectileMovement->InitialSpeed;
 }
 
-void AMagicProjectile::OnHit(UPrimitiveComponent* HitComponent,
-	AActor* OtherActor,
-	UPrimitiveComponent* OtherComp,
-	FVector NormalImpulse,
-	const FHitResult& Hit)
+void AMagicProjectile::HandleOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+                       				   UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
+                       				   bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (IDamageInterface* Hittable = Cast<IDamageInterface>(HitComponent->GetOwner()))
+	if (OtherActor && OtherActor != this)
 	{
-		Hittable->ReceiveDamage(5.0f, "Magic");
-	}
+		if (!OtherActor->ActorHasTag("Player"))
+		{
+			UE_LOG(LogTemp, Display, TEXT("Overlapper: %s"), *OtherActor->GetClass()->GetName());
+			
+			if (IDamageInterface* Hittable = Cast<IDamageInterface>(OtherActor))
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Hit by a Magic Projectile"));	
+				Hittable->ReceiveDamage(5.0f, "Magic");
+			}
 
-	Destroy();
+			Destroy();
+		}
+	}
 }
 
 
