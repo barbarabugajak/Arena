@@ -55,6 +55,11 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (BlockMeter < MaxBlock && bIsBlocking == false && bIsMeleeAttacking == false)
+	{
+		BlockMeter += 5 * DeltaTime;
+	}
+
 }
 
 // Called to bind functionality to input
@@ -240,20 +245,34 @@ void APlayerCharacter::StopBlocking(const FInputActionValue& Value)
 
 void APlayerCharacter::ReceiveDamage(float DamageAmount, FString DamageType)
 {
-	if (!bIsBlocking)
-	{
 		if (DamageAmount > 0)
 		{
-			Health -= DamageAmount;
-			UE_LOG(LogTemp, Warning, TEXT("Damage Amount: %f"), DamageAmount);
-			UE_LOG(LogTemp, Warning, TEXT("Health: %f"), Health);
+			if (bIsBlocking)
+			{
+				if (DamageAmount <= BlockMeter && bIsBlocking)
+				{
+					BlockMeter -= DamageAmount;
+				} else
+				{
+					bIsBlocking = false;
+					BlockMeter = 0;
+					StopBlocking(1);
+					Health -= DamageAmount;
+				}
+			} else
+			{
+				Health -= DamageAmount;
+				UE_LOG(LogTemp, Warning, TEXT("Damage Amount: %f"), DamageAmount);
+				UE_LOG(LogTemp, Warning, TEXT("Health: %f"), Health);
+			}
+			
 		}
 		if (Health <= 0)
 		{
 			// For now
 			UKismetSystemLibrary::QuitGame(GetWorld(), UGameplayStatics::GetPlayerController(GetWorld(), 0), EQuitPreference::Quit, false);
 		}
-	}
+	
 }
 void APlayerCharacter::CauseDamageToAnotherActor(AActor* OtherActor, float DamageAmount, FString DamageType)
 {

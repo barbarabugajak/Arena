@@ -115,10 +115,10 @@ public:
 	FOnBlockingStateChanged BlockChanged;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Blocking")
-	float MaxBlock = 50.0f;
+	float MaxBlock = 10.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Blocking")
-	float BlockMeter;
+	float BlockMeter = MaxBlock;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Blocking")
 	bool bIsBlocking = false;
