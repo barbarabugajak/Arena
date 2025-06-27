@@ -164,7 +164,7 @@ TArray<AActor*> AEnemyBase::bIsPlayerNearby(float Distance)
 		IgnoredActors,
 		HitResults);
 
-	DrawDebugSphere(GetWorld(), GetActorLocation(), Distance, 32, FColor::Red, false, 10.0f);
+	// DrawDebugSphere(GetWorld(), GetActorLocation(), Distance, 32, FColor::Red, false, 10.0f);
 	
 	return HitResults;
 }

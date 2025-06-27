@@ -14,6 +14,7 @@ APurpleWizard::APurpleWizard()
 	AIControllerClass = AAIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
+
 }
 
 void APurpleWizard::BeginPlay()
