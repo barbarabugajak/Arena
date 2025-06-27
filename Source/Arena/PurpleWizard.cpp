@@ -32,9 +32,8 @@ void APurpleWizard::Tick(float DeltaTime)
 	AAIController* AIController = Cast<AAIController>(GetController());
 	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 
-	if (AIController->IsFollowingAPath() == false)
+	if (AIController)
 	{
-
 		FVector SomeRandomnessToMovement = FVector(FMath::RandRange(-10, 10), FMath::RandRange(-10, 10), 0);
 		AIController->MoveToLocation(PlayerCharacter->GetActorLocation()+SomeRandomnessToMovement, 40);
 		AIController->SetFocus(PlayerCharacter);
