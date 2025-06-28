@@ -21,6 +21,7 @@ void APurpleWizard::BeginPlay()
 {
 	Super::BeginPlay();
 	Health = 25.0f;
+	MaxHealth = 25.0f; 
 	MeleeAttackDelay = 1.2f;
 	bCanMeleeAttack = true;
 	bIsMeleeAttacking = false;
