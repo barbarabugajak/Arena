@@ -53,6 +53,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	UInputAction* IA_Camera;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+	UInputAction* IA_Esc;
 	
 	UFUNCTION()
 	void MoveForward(const FInputActionValue& Value);
@@ -125,9 +128,9 @@ public:
 	
 	// Stats
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
-	float Health = 100.0f;
+	float Health = 10.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
-	float MaxHealth = 100.0f;
+	float MaxHealth = 10.0f;
 
 	// Wizard Comps
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wizard Components")
@@ -139,4 +142,12 @@ public:
 	// Damage
 	virtual void ReceiveDamage(float DamageAmount, FString DamageType) override;
 	virtual void CauseDamageToAnotherActor(AActor* OtherActor, float DamageAmount, FString DamageType) override;
+
+	// UI Handlers
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnUIChanges);
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, BlueprintAssignable, Category = "UI")
+	FOnUIChanges ShowLoseScreen;
+
+	UFUNCTION()
+	void QuitGame(const FInputActionValue& Value);
 };

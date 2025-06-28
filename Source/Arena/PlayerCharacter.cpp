@@ -89,8 +89,15 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInput->BindAction(IA_Shield, ETriggerEvent::Completed, this, &APlayerCharacter::StopBlocking);
 		EnhancedInput->BindAction(IA_MagicRay, ETriggerEvent::Triggered, this, &APlayerCharacter::MagicRayAttack);
 		EnhancedInput->BindAction(IA_MagicProjectile, ETriggerEvent::Triggered, this, &APlayerCharacter::LaunchMagicProjectile);
+		EnhancedInput->BindAction(IA_Esc, ETriggerEvent::Triggered, this, &APlayerCharacter::QuitGame);
 	}
 
+}
+
+void APlayerCharacter::QuitGame(const FInputActionValue& Value)
+{
+	APlayerController* PC = Cast<APlayerController>(Controller);
+	UKismetSystemLibrary::QuitGame(GetWorld(), PC, EQuitPreference::Quit, false);
 }
 
 void APlayerCharacter::CameraRotation(const FInputActionValue& Value)
@@ -269,8 +276,8 @@ void APlayerCharacter::ReceiveDamage(float DamageAmount, FString DamageType)
 		}
 		if (Health <= 0)
 		{
-			// For now
-			UKismetSystemLibrary::QuitGame(GetWorld(), UGameplayStatics::GetPlayerController(GetWorld(), 0), EQuitPreference::Quit, false);
+			// UKismetSystemLibrary::QuitGame(GetWorld(), UGameplayStatics::GetPlayerController(GetWorld(), 0), EQuitPreference::Quit, false);
+			ShowLoseScreen.Broadcast();
 		}
 	
 }
