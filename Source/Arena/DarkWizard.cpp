@@ -19,7 +19,8 @@ ADarkWizard::ADarkWizard()
 void ADarkWizard::BeginPlay()
 {
 	Super::BeginPlay();
-	Health = 10.0f;
+	Health = 15.0f;
+	MaxHealth = 15.0f;
 	MeleeAttackDelay = 2.0f;
 	bCanMeleeAttack = false; // This one does not melee attack
 	bIsMeleeAttacking = false;
