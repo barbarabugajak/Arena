@@ -232,7 +232,7 @@ void APlayerCharacter::LaunchMagicProjectile()
 
 				FVector Location = GetMesh()->GetSocketLocation("Weapon");
 				
-				DrawDebugBox(GetWorld(),Location, FVector(10.0f, 10.0f, 10.0f), FColor::Red, true, 1000.0f );
+				// DrawDebugBox(GetWorld(),Location, FVector(10.0f, 10.0f, 10.0f), FColor::Red, true, 1000.0f );
 				GetWorld()->SpawnActor<AMagicProjectile>(MagicProjectile_BPClass, Location, GetActorRotation(), SpawnParams);
 
 				bCanProjectileAttack = false;
@@ -329,6 +329,6 @@ TArray<AActor*> APlayerCharacter::EnemiesNearby(float Distance)
 		IgnoredActors,
 		HitResults);
 
-	DrawDebugSphere(GetWorld(), Location, Distance, 20, FColor::Yellow, true);
+	// DrawDebugSphere(GetWorld(), Location, Distance, 20, FColor::Yellow, true);
 	return HitResults;
 }
