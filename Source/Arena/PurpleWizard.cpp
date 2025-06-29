@@ -25,6 +25,7 @@ void APurpleWizard::BeginPlay()
 	MeleeAttackDelay = 1.2f;
 	bCanMeleeAttack = true;
 	bIsMeleeAttacking = false;
+
 }
 
 void APurpleWizard::Tick(float DeltaTime)
@@ -32,12 +33,13 @@ void APurpleWizard::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	AAIController* AIController = Cast<AAIController>(GetController());
+	
 	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 
 	if (AIController)
 	{
-		FVector SomeRandomnessToMovement = FVector(FMath::RandRange(-10, 10), FMath::RandRange(-10, 10), 0);
-		AIController->MoveToLocation(PlayerCharacter->GetActorLocation()+SomeRandomnessToMovement, 40);
+		// FVector SomeRandomnessToMovement = FVector(FMath::RandRange(-100, 300), FMath::RandRange(-100, 300), 0);
+		AIController->MoveToLocation(PlayerCharacter->GetActorLocation(), 40);
 		AIController->SetFocus(PlayerCharacter);
 	}
 		if (bCanMeleeAttack && !bIsMeleeAttacking)
