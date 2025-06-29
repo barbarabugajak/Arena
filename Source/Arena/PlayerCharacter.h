@@ -56,6 +56,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	UInputAction* IA_Esc;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+	UInputAction* IA_Potion;
 	
 	UFUNCTION()
 	void MoveForward(const FInputActionValue& Value);
@@ -128,9 +131,9 @@ public:
 	
 	// Stats
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
-	float Health = 10.0f;
+	float Health = 100.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
-	float MaxHealth = 10.0f;
+	float MaxHealth = 100.0f;
 
 	// Wizard Comps
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wizard Components")
@@ -148,6 +151,19 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, BlueprintAssignable, Category = "UI")
 	FOnUIChanges ShowLoseScreen;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, BlueprintAssignable, Category = "UI")
+	FOnUIChanges ChangeAmountOfPotions;
+
 	UFUNCTION()
 	void QuitGame(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void Heal(const FInputActionValue& Value);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Heal")
+	bool bIsHealing;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Heal")
+	int HealAmount = 50;
+	
 };

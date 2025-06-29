@@ -60,6 +60,18 @@ void APlayerCharacter::Tick(float DeltaTime)
 		BlockMeter += 5 * DeltaTime;
 	}
 
+
+	if (bIsHealing == true && bIsMeleeAttacking == false)
+	{
+		if (HealAmount + Health > MaxHealth)
+		{
+			Health = MaxHealth;
+		} else
+		{
+			Health += HealAmount;
+		}
+		bIsHealing = false;
+	}
 }
 
 // Called to bind functionality to input
@@ -90,9 +102,17 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInput->BindAction(IA_MagicRay, ETriggerEvent::Triggered, this, &APlayerCharacter::MagicRayAttack);
 		EnhancedInput->BindAction(IA_MagicProjectile, ETriggerEvent::Triggered, this, &APlayerCharacter::LaunchMagicProjectile);
 		EnhancedInput->BindAction(IA_Esc, ETriggerEvent::Triggered, this, &APlayerCharacter::QuitGame);
+		EnhancedInput->BindAction(IA_Potion, ETriggerEvent::Started, this, &APlayerCharacter::Heal);
 	}
 
 }
+
+void APlayerCharacter::Heal(const FInputActionValue& Value)
+{
+	ChangeAmountOfPotions.Broadcast();
+	UE_LOG(LogTemp, Log, TEXT("Healing"));
+}
+
 
 void APlayerCharacter::QuitGame(const FInputActionValue& Value)
 {
