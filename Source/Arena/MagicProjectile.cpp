@@ -38,7 +38,7 @@ void AMagicProjectile::BeginPlay()
 	
 	CollisionComponent->SetGenerateOverlapEvents(true);
 	CollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &AMagicProjectile::HandleOverlap);
-	
+	InitialLifeSpan = 4.0f;
 }
 
 // Called every frame
