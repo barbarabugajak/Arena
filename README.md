@@ -3,14 +3,14 @@
 > You control a wizard fighting against waves of enemies.
 > Fight, cast rays of energy and magic projectiles - but be careful, enemies only get stronger and your health is limited
 
----
+
 
 ## 🕹️ How To Play
 
 1. Download and install the game or clone the repository.
 2. Launch the executable or open the project in Unreal Editor.
 
----
+
 
 ## 🚀 Features
 
@@ -18,7 +18,11 @@
 - 🔹 Created with a mix of C++ and Blueprints
 - 🔹 I built the first version in a week — it was a challenge designed to test my performance under pressure 
 
----
+
+## 🕒 Timeline 
+- 23.06-29.06.2025: Creation (v1)
+- 8.07-10.07: Bug fixes & gameplay enhancements (v2)
+
 
 ## 🛠️ Getting Started
 
