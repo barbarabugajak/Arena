@@ -28,7 +28,7 @@
 
 ### Prerequisites
 
-- [Unreal Engine 5](https://www.unrealengine.com/en-US/download) (recommended version: 5.x)
+- [Unreal Engine 5](https://www.unrealengine.com/en-US/download) (recommended version: 5.5)
 - Visual Studio / Rider with C++ support
 - Windows 10/11 or compatible OS
 
