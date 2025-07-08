@@ -55,6 +55,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	float MeleeAttackDelay = 1.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	float MeleeAttackValue = 10.0f;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	bool bIsMeleeAttacking;

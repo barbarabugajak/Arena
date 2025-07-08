@@ -92,7 +92,6 @@ void AEnemyBase::Melee(float Distance , float DamageAmount)
 				// Melee Attack
 				UE_LOG(LogTemp, Warning, TEXT("PurpleWizard Starting Melee Attack"));
 				bIsMeleeAttacking = true;
-				CauseDamageToAnotherActor(Player, DamageAmount, "Melee");
 				bCanMeleeAttack = false;
 			}
 		}
@@ -105,6 +104,9 @@ void AEnemyBase::EndMeleeAttack()
 	UE_LOG(LogTemp, Warning, TEXT("End of Melee Attack"));
 	bIsMeleeAttacking = false;
 
+	APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	CauseDamageToAnotherActor(Player, MeleeAttackValue, "Melee");
+	
 	FTimerHandle TimerHandle;
 	// Cooldown
 	GetWorld()->GetTimerManager().SetTimer(

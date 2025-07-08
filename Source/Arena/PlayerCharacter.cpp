@@ -69,6 +69,13 @@ void APlayerCharacter::Tick(float DeltaTime)
 		} else
 		{
 			Health += HealAmount;
+			if (Health > 10)
+			{
+				if (TintHandler)
+				{
+					TintHandler->PlayerLowHealthOff.Broadcast();
+				}
+			}
 		}
 		bIsHealing = false;
 	}
@@ -274,6 +281,11 @@ void APlayerCharacter::ReceiveDamage(float DamageAmount, FString DamageType)
 {
 		if (DamageAmount > 0)
 		{
+			if (TintHandler)
+			{
+				TintHandler->PlayerDamage.Broadcast();
+			}
+			
 			if (bIsBlocking)
 			{
 				if (DamageAmount <= BlockMeter && bIsBlocking)
@@ -285,6 +297,8 @@ void APlayerCharacter::ReceiveDamage(float DamageAmount, FString DamageType)
 					BlockMeter = 0;
 					StopBlocking(1);
 					Health -= DamageAmount;
+
+					
 				}
 			} else
 			{
@@ -294,6 +308,15 @@ void APlayerCharacter::ReceiveDamage(float DamageAmount, FString DamageType)
 			}
 			
 		}
+
+		if (Health <= 10)
+		{
+			if (TintHandler)
+			{
+				TintHandler->PlayerLowHealthOn.Broadcast();
+			}
+		}
+		
 		if (Health <= 0)
 		{
 			// UKismetSystemLibrary::QuitGame(GetWorld(), UGameplayStatics::GetPlayerController(GetWorld(), 0), EQuitPreference::Quit, false);

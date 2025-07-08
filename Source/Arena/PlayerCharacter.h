@@ -8,6 +8,7 @@
 #include "GameFramework/Character.h"
 #include "EnhancedInputSubsystems.h"
 #include "MagicProjectile.h"
+#include "TintHandler.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "PlayerCharacter.generated.h"
@@ -165,5 +166,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Heal")
 	int HealAmount = 50;
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Juice")
+	TSoftObjectPtr<ATintHandler> TintHandler;
 };
