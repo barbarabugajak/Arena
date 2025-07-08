@@ -1,6 +1,4 @@
-# 🌟 Arena 🌟
-
-## 🎮 About The Game
+# 🌟 Arena 🌟 
 
 > You control a wizard fighting against waves of enemies.
 > Fight, cast rays of energy and magic projectiles - but be careful, enemies only get stronger and your health is limited
