@@ -1,8 +1,5 @@
 # 🌟 Arena 🌟
 
-
----
-
 ## 🎮 About The Game
 
 > You control a wizard fighting against waves of enemies.
