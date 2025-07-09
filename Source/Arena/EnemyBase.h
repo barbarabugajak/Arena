@@ -41,7 +41,7 @@ public:
 	virtual void ReceiveDamage(float DamageAmount, FString DamageType) override;
 	
 	virtual void CauseDamageToAnotherActor(AActor* OtherActor, float DamageAmount, FString DamageType) override;
-
+	
 	
 	
 	UFUNCTION()
@@ -73,4 +73,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	bool bCanMagicRayAttack = true;
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDamage, float, DamageAmount);
+	UPROPERTY(EditAnywhere, BlueprintAssignable, Category = "DamageIndicator")
+	FOnDamage DamageIndicatorDelegate;
 };

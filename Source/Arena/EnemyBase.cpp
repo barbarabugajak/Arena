@@ -5,6 +5,7 @@
 
 #include "MagicRay.h"
 #include "PlayerCharacter.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -48,6 +49,18 @@ void AEnemyBase::ReceiveDamage(float DamageAmount, FString DamageType)
 		Health -= DamageAmount;
 		UE_LOG(LogTemp, Warning, TEXT("Damage Amount: %f"), DamageAmount);
 		UE_LOG(LogTemp, Warning, TEXT("Health: %f"), Health);
+
+		// Be pushed away
+		APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+		if (Player)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Is pushed away"));
+			GetCharacterMovement()->Launch(GetActorForwardVector()*-1000);
+		}
+
+		// Damage indicator
+		DamageIndicatorDelegate.Broadcast(DamageAmount);
+
 	}
 	if (Health <= 0)
 	{

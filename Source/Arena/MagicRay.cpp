@@ -52,7 +52,7 @@ void AMagicRay::HandleOverlap(UPrimitiveComponent* OverlappedComponent, AActor* 
 			if (IDamageInterface* Actor = Cast<IDamageInterface>(OtherActor))
 			{
 				UE_LOG(LogTemp, Display, TEXT("AMagicRay::HandleOverlap - DamageInterface"));
-				Actor->ReceiveDamage(5.0f, "Magic");
+				Actor->ReceiveDamage(6.0f, "Magic");
 			}
 		}
 	}

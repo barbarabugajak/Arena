@@ -281,10 +281,7 @@ void APlayerCharacter::ReceiveDamage(float DamageAmount, FString DamageType)
 {
 		if (DamageAmount > 0)
 		{
-			if (TintHandler)
-			{
-				TintHandler->PlayerDamage.Broadcast();
-			}
+			
 			
 			if (bIsBlocking)
 			{
@@ -298,6 +295,11 @@ void APlayerCharacter::ReceiveDamage(float DamageAmount, FString DamageType)
 					StopBlocking(1);
 					Health -= DamageAmount;
 
+					if (TintHandler)
+					{
+						TintHandler->PlayerDamage.Broadcast();
+					}
+
 					
 				}
 			} else
@@ -305,6 +307,11 @@ void APlayerCharacter::ReceiveDamage(float DamageAmount, FString DamageType)
 				Health -= DamageAmount;
 				UE_LOG(LogTemp, Warning, TEXT("Damage Amount: %f"), DamageAmount);
 				UE_LOG(LogTemp, Warning, TEXT("Health: %f"), Health);
+
+				if (TintHandler)
+				{
+					TintHandler->PlayerDamage.Broadcast();
+				}
 			}
 			
 		}
