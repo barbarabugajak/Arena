@@ -68,7 +68,7 @@ void AMagicProjectile::HandleOverlap(UPrimitiveComponent* OverlappedComponent, A
 			if (IDamageInterface* Hittable = Cast<IDamageInterface>(OtherActor))
 			{
 				UE_LOG(LogTemp, Warning, TEXT("Hit by a Magic Projectile"));	
-				Hittable->ReceiveDamage(5.0f, "Magic");
+				Hittable->ReceiveDamage(10.0f, "Magic");
 			}
 
 			Destroy();
