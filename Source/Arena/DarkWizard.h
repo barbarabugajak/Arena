@@ -22,6 +22,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<AMagicRay> MagicRayClass;
+
+	bool bShouldGetNewPath;
 	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

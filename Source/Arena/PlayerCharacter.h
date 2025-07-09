@@ -169,4 +169,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Juice")
 	TSoftObjectPtr<ATintHandler> TintHandler;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	bool bIsAlive = true;
 };

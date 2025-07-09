@@ -32,6 +32,7 @@ void ADarkWizard::BeginPlay()
 	}, 1.0f, false);
 	
 	MyBPClass = MagicRayClass->GetDefaultObject()->GetClass();
+	
 }
 
 void ADarkWizard::Tick(float DeltaTime)
@@ -41,17 +42,8 @@ void ADarkWizard::Tick(float DeltaTime)
 	AAIController* AIController = Cast<AAIController>(GetController());
 	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 	
-	if (AIController->IsFollowingAPath() == false)
-	{
-		// Random point away from the player, but close enough to attack
-		FVector PlayerLoc = PlayerCharacter->GetActorLocation();
-		float Angle = FMath::FRandRange(0.f, 2 * PI), Dist = FMath::FRandRange(300.f, 400.f);
-		FVector RandomPoint = PlayerLoc + FVector(FMath::Cos(Angle), FMath::Sin(Angle), 0.f) * Dist;
-		
-		FVector SomeRandomnessToMovement = FVector(FMath::RandRange(-10, 10), FMath::RandRange(-10, 10), 0);
-		AIController->MoveToLocation(RandomPoint, 40);
-		AIController->SetFocus(PlayerCharacter);
-	}
+	AIController->SetFocus(PlayerCharacter);
+	
 	if (bCanMagicRayAttack)
 	{
 		MagicRayAttack(100.0f, 2.0f);

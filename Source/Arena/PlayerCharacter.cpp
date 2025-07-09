@@ -327,7 +327,9 @@ void APlayerCharacter::ReceiveDamage(float DamageAmount, FString DamageType)
 		if (Health <= 0)
 		{
 			// UKismetSystemLibrary::QuitGame(GetWorld(), UGameplayStatics::GetPlayerController(GetWorld(), 0), EQuitPreference::Quit, false);
+			bIsAlive = false;
 			ShowLoseScreen.Broadcast();
+			UGameplayStatics::SetGamePaused(GetWorld(), true);
 		}
 	
 }
