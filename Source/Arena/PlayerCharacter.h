@@ -132,9 +132,9 @@ public:
 	
 	// Stats
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
-	float Health = 100.0f;
+	float Health = 1000.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
-	float MaxHealth = 100.0f;
+	float MaxHealth = 1000.0f;
 
 	// Wizard Comps
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wizard Components")
