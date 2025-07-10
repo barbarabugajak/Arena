@@ -132,9 +132,9 @@ public:
 	
 	// Stats
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
-	float Health = 1000.0f;
+	float Health = 100.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
-	float MaxHealth = 1000.0f;
+	float MaxHealth = 100.0f;
 
 	// Wizard Comps
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wizard Components")
@@ -170,6 +170,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Juice")
 	TSoftObjectPtr<ATintHandler> TintHandler;
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSoundEffect, FString, SoundType);
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, BlueprintAssignable, Category = "Juice")
+	FSoundEffect SoundEffect;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	bool bIsAlive = true;
 };

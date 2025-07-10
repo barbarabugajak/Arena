@@ -96,13 +96,14 @@ void AEnemyBase::Melee(float Distance , float DamageAmount)
 	if (bCanMeleeAttack && !bIsMeleeAttacking)
 	{
 		TArray<AActor*> OverlappingActors = bIsPlayerNearby(Distance);
-
+		
 		if (OverlappingActors.Num() > 0)
 		{
 			APlayerCharacter* Player = Cast<APlayerCharacter>(OverlappingActors[0]); // Well, there's only one player
 			if (Player)
 			{
 				// Melee Attack
+				MeleeSound.Broadcast();
 				UE_LOG(LogTemp, Warning, TEXT("PurpleWizard Starting Melee Attack"));
 				bIsMeleeAttacking = true;
 				bCanMeleeAttack = false;

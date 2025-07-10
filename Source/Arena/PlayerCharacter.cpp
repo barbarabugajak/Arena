@@ -160,11 +160,12 @@ void APlayerCharacter::MeleeAttack()
 {
 	if (bCanMeleeAttack)
 	{
+		
 		bIsMeleeAttacking = true;
 		bCanMeleeAttack = false;
 		UE_LOG(LogTemp, Warning, TEXT("Attacking!"))
 		TArray<AActor*> Enemies = EnemiesNearby(100.0f); // Seems about right :)
-
+		
 		if (Enemies.Num() > 0)
 		{
 			for (AActor* EnemyHit: Enemies)
@@ -172,10 +173,11 @@ void APlayerCharacter::MeleeAttack()
 				if (IDamageInterface* HitActor = Cast<IDamageInterface>(EnemyHit))
 				{
 					HitActor->ReceiveDamage(5.0f, "Melee");
-
 				}
 			}
 		}
+
+		SoundEffect.Broadcast("Melee");
 	}
 }
 

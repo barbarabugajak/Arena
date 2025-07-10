@@ -80,4 +80,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Juice")
 	float PushValue = 1000.0f;
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FSoundEffect);
+	UPROPERTY(EditAnywhere, BlueprintAssignable, Category = "Juice")
+	FSoundEffect MeleeSound;
+
 };
