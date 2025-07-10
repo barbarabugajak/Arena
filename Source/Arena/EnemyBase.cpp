@@ -55,7 +55,7 @@ void AEnemyBase::ReceiveDamage(float DamageAmount, FString DamageType)
 		if (Player)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Is pushed away"));
-			GetCharacterMovement()->Launch(GetActorForwardVector()*-1000);
+			GetCharacterMovement()->Launch(GetActorForwardVector()*-PushValue);
 		}
 
 		// Damage indicator

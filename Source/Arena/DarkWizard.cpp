@@ -32,6 +32,7 @@ void ADarkWizard::BeginPlay()
 	}, 1.0f, false);
 	
 	MyBPClass = MagicRayClass->GetDefaultObject()->GetClass();
+
 	
 }
 
@@ -48,4 +49,6 @@ void ADarkWizard::Tick(float DeltaTime)
 	{
 		MagicRayAttack(100.0f, 2.0f);
 	}
+
+
 }

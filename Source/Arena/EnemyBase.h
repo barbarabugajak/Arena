@@ -77,4 +77,7 @@ public:
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDamage, float, DamageAmount);
 	UPROPERTY(EditAnywhere, BlueprintAssignable, Category = "DamageIndicator")
 	FOnDamage DamageIndicatorDelegate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Juice")
+	float PushValue = 1000.0f;
 };

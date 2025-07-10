@@ -6,6 +6,7 @@
 #include "PlayerCharacter.h"
 #include "Kismet/GameplayStatics.h"
 
+
 APurpleWizard::APurpleWizard()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -13,7 +14,6 @@ APurpleWizard::APurpleWizard()
 	// AI Possess
 	AIControllerClass = AAIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
-
 
 }
 
@@ -25,6 +25,8 @@ void APurpleWizard::BeginPlay()
 	MeleeAttackDelay = 1.2f;
 	bCanMeleeAttack = true;
 	bIsMeleeAttacking = false;
+
+	PushValue = 5000.0f;
 
 }
 
@@ -46,6 +48,8 @@ void APurpleWizard::Tick(float DeltaTime)
 		{
 			Melee(100.0f, 2.0f);
 		}
+
+	
 }
 
 
