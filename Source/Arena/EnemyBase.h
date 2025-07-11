@@ -48,13 +48,13 @@ public:
 	TArray<AActor*> bIsPlayerNearby(float Distance);
 
 	UFUNCTION()
-	void Melee(float Distance , float DamageAmount);
+	void Melee(float Distance);
 	
 	UFUNCTION()
 	void EndMeleeAttack();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
-	float MeleeAttackDelay = 1.0f;
+	float MeleeAttackDelay = 0.2f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	float MeleeAttackValue = 10.0f;

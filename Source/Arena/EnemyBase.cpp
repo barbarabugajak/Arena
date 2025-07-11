@@ -91,7 +91,7 @@ void AEnemyBase::CauseDamageToAnotherActor(AActor* OtherActor, float DamageAmoun
 }
 
 
-void AEnemyBase::Melee(float Distance , float DamageAmount)
+void AEnemyBase::Melee(float Distance)
 {
 	if (bCanMeleeAttack && !bIsMeleeAttacking)
 	{
@@ -104,7 +104,6 @@ void AEnemyBase::Melee(float Distance , float DamageAmount)
 			{
 				// Melee Attack
 				MeleeSound.Broadcast();
-				UE_LOG(LogTemp, Warning, TEXT("PurpleWizard Starting Melee Attack"));
 				bIsMeleeAttacking = true;
 				bCanMeleeAttack = false;
 			}
@@ -118,8 +117,14 @@ void AEnemyBase::EndMeleeAttack()
 	UE_LOG(LogTemp, Warning, TEXT("End of Melee Attack"));
 	bIsMeleeAttacking = false;
 
-	APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	CauseDamageToAnotherActor(Player, MeleeAttackValue, "Melee");
+	TArray<AActor*> OverlappingActors = bIsPlayerNearby(45.0f);
+	
+
+	if (OverlappingActors.Num() > 0)
+	{
+		CauseDamageToAnotherActor(OverlappingActors[0], MeleeAttackValue, "Melee");
+	}
+	
 	
 	FTimerHandle TimerHandle;
 	// Cooldown
@@ -173,14 +178,14 @@ TArray<AActor*> AEnemyBase::bIsPlayerNearby(float Distance)
 	
 	bool bIsPlayerNear = UKismetSystemLibrary::SphereOverlapActors(
 		GetWorld(),
-		GetActorLocation(),
+		GetActorLocation() + GetActorForwardVector() * Distance,
 		Distance,
 		ObjectTypes,
 		APlayerCharacter::StaticClass(),
 		IgnoredActors,
 		HitResults);
 
-	// DrawDebugSphere(GetWorld(), GetActorLocation(), Distance, 32, FColor::Red, false, 10.0f);
+	// DrawDebugSphere(GetWorld(), GetActorLocation() + GetActorForwardVector() * Distance, Distance, 32, FColor::Red, false, 1.0f);
 	
 	return HitResults;
 }

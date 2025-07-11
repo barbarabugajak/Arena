@@ -191,7 +191,7 @@ void APlayerCharacter::EndMeleeAttack()
 		[this]()
 		{
 			bCanMeleeAttack = true;
-		}, 1.5f, false);
+		}, 0.2f, false); // Needs to be a short while, due to anims
 }
 
 

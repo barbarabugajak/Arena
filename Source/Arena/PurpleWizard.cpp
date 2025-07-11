@@ -22,7 +22,6 @@ void APurpleWizard::BeginPlay()
 	Super::BeginPlay();
 	Health = 25.0f;
 	MaxHealth = 25.0f; 
-	MeleeAttackDelay = 1.2f;
 	bCanMeleeAttack = true;
 	bIsMeleeAttacking = false;
 
@@ -46,7 +45,7 @@ void APurpleWizard::Tick(float DeltaTime)
 	}
 		if (bCanMeleeAttack && !bIsMeleeAttacking)
 		{
-			Melee(100.0f, 2.0f);
+			Melee(50.0f);
 		}
 
 	
