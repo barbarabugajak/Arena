@@ -22,7 +22,6 @@ class ARENA_API APurpleWizard : public AEnemyBase
 	
 		// Called every frame
 		virtual void Tick(float DeltaTime) override;
-
 		
 
 };

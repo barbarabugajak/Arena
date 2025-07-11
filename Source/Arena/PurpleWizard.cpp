@@ -3,6 +3,7 @@
 
 #include "PurpleWizard.h"
 #include "AIController.h"
+#include "DetourCrowdAIController.h"
 #include "PlayerCharacter.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -33,14 +34,13 @@ void APurpleWizard::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	AAIController* AIController = Cast<AAIController>(GetController());
+	ADetourCrowdAIController* AIController = Cast<ADetourCrowdAIController>(GetController());
 	
 	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 
 	if (AIController)
 	{
-		// FVector SomeRandomnessToMovement = FVector(FMath::RandRange(-100, 300), FMath::RandRange(-100, 300), 0);
-		AIController->MoveToLocation(PlayerCharacter->GetActorLocation(), 40);
+		AIController->MoveToActor(PlayerCharacter, 40, false);
 		AIController->SetFocus(PlayerCharacter);
 	}
 		if (bCanMeleeAttack && !bIsMeleeAttacking)
