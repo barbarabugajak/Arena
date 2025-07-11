@@ -47,7 +47,7 @@ void ADarkWizard::Tick(float DeltaTime)
 	
 	if (bCanMagicRayAttack)
 	{
-		MagicRayAttack(100.0f, 2.0f);
+		MagicRayAttack(50.0f, 2.0f, 1.0f);
 	}
 
 

@@ -207,8 +207,10 @@ void APlayerCharacter::MagicRayAttack()
 			{
 				// Add some randomness
 				FVector Location = Enemies[0]->GetActorLocation() + FVector(FMath::RandRange(-80, 80), FMath::RandRange(-80, 80), 0);;
-				
-				GetWorld()->SpawnActor<AMagicRay>(MyBPClass, Location, FRotator::ZeroRotator);
+
+
+				AMagicRay* Ray = GetWorld()->SpawnActor<AMagicRay>(MyBPClass, Location, FRotator::ZeroRotator);
+				Ray->OnSpawned.Broadcast(0.3f);
 				bCanMagicRayAttack = false;
 				
 				FTimerHandle TimerHandle;

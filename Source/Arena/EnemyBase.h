@@ -66,7 +66,7 @@ public:
 	bool bCanMeleeAttack;
 
 	UFUNCTION()
-	void MagicRayAttack(float Range, float Disortion);
+	void MagicRayAttack(float Range, float Disortion, float Delay);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	TSubclassOf<AActor> MyBPClass;

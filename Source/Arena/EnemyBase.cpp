@@ -29,7 +29,7 @@ void AEnemyBase::Tick(float DeltaTime)
 
 	if (bCanMagicRayAttack)
 	{
-		MagicRayAttack(900.0f, 100.0f);
+		MagicRayAttack(900.0f, 100.0f, 0.9f);
 	}
 
 }
@@ -136,7 +136,7 @@ void AEnemyBase::EndMeleeAttack()
 		}, MeleeAttackDelay, false);
 }
 
-void AEnemyBase::MagicRayAttack(float Range, float Disortion)
+void AEnemyBase::MagicRayAttack(float Range, float Disortion, float Delay)
 {
 	if (bCanMagicRayAttack)
 	{
@@ -149,7 +149,12 @@ void AEnemyBase::MagicRayAttack(float Range, float Disortion)
 				// Add some randomness
 				FVector Location = Player[0]->GetActorLocation() + FVector(FMath::RandRange(-Disortion, Disortion), FMath::RandRange(-Disortion, Disortion), 0);;
 				
-				GetWorld()->SpawnActor<AMagicRay>(MyBPClass, Location, FRotator::ZeroRotator);
+				AMagicRay* Ray = GetWorld()->SpawnActor<AMagicRay>(MyBPClass, Location, FRotator::ZeroRotator);
+				if (Ray)
+				{
+					Ray->OnSpawned.Broadcast(Delay);
+				}
+					
 				bCanMagicRayAttack = false;
 				
 				FTimerHandle TimerHandle;
