@@ -34,10 +34,9 @@ public:
 	float VisualDelay = 0.2f;
 	
 	UFUNCTION()
-	void HandleOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-				   UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
-				   bool bFromSweep, const FHitResult& SweepResult);
+	void HandleOverlap(AActor* MyOverlappedActor, AActor* OtherActor);
 
+	TArray<AActor*> OverlappedActors; // Hit each actor only once, for gameplay flow reasons
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSpawned, float, Delay);
 	UPROPERTY(EditAnywhere, BlueprintAssignable, BlueprintReadWrite, Category = "Init")

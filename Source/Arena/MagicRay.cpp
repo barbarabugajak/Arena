@@ -29,7 +29,7 @@ void AMagicRay::BeginPlay()
 
 	BoxComponent->SetGenerateOverlapEvents(true);
 	
-	BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &AMagicRay::HandleOverlap);
+	OnActorBeginOverlap.AddDynamic(this, &AMagicRay::HandleOverlap);
 	
 }
 
@@ -40,9 +40,7 @@ void AMagicRay::Tick(float DeltaTime)
 
 }
 
-void AMagicRay::HandleOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-				   UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
-				   bool bFromSweep, const FHitResult& SweepResult)
+void AMagicRay::HandleOverlap(AActor* OverlappedActor, AActor* OtherActor)
 {
 	UE_LOG(LogTemp, Display, TEXT("AMagicRay::HandleOverlap"));
 	if (OtherActor && OtherActor != this)
@@ -51,8 +49,15 @@ void AMagicRay::HandleOverlap(UPrimitiveComponent* OverlappedComponent, AActor* 
 		{
 			if (IDamageInterface* Actor = Cast<IDamageInterface>(OtherActor))
 			{
-				UE_LOG(LogTemp, Display, TEXT("AMagicRay::HandleOverlap - DamageInterface"));
-				Actor->ReceiveDamage(6.0f, "Magic");
+				if (!OverlappedActors.Contains(OtherActor))
+				{
+					UE_LOG(LogTemp, Display, TEXT("AMagicRay::HandleOverlap - DamageInterface"));
+					Actor->ReceiveDamage(6.0f, "Magic");
+				} else
+				{
+					OverlappedActors.Add(OtherActor);
+				}
+				
 			}
 		}
 	}
