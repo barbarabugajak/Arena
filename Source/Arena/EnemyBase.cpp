@@ -27,7 +27,7 @@ void AEnemyBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (bCanMagicRayAttack)
+	if (bCanMagicRayAttack && !bIsDead)
 	{
 		MagicRayAttack(900.0f, 100.0f, 0.9f);
 	}
@@ -65,7 +65,10 @@ void AEnemyBase::ReceiveDamage(float DamageAmount, FString DamageType)
 	if (Health <= 0)
 	{
 		bIsDead = true;
-
+		if (RayRef)
+		{
+			Destroy();
+		}
 		FTimerHandle TimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(
 			TimerHandle,
@@ -153,6 +156,7 @@ void AEnemyBase::MagicRayAttack(float Range, float Disortion, float Delay)
 				if (Ray)
 				{
 					Ray->OnSpawned.Broadcast(Delay);
+					RayRef = Ray;
 				}
 					
 				bCanMagicRayAttack = false;

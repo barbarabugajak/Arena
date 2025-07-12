@@ -36,7 +36,7 @@ public:
 	UFUNCTION()
 	void HandleOverlap(AActor* MyOverlappedActor, AActor* OtherActor);
 
-	TArray<AActor*> OverlappedActors; // Hit each actor only once, for gameplay flow reasons
+	TArray<AActor*> OverlappedActors; // Hit each actor only once, for gameplay flow reason;
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSpawned, float, Delay);
 	UPROPERTY(EditAnywhere, BlueprintAssignable, BlueprintReadWrite, Category = "Init")

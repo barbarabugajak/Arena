@@ -8,6 +8,7 @@
 #include "GameFramework/Character.h"
 #include "EnhancedInputSubsystems.h"
 #include "MagicProjectile.h"
+#include "MagicRay.h"
 #include "TintHandler.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -176,4 +177,7 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	bool bIsAlive = true;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Juice")
+	AMagicRay* RayRef;
 };

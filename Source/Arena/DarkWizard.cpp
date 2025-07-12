@@ -45,7 +45,7 @@ void ADarkWizard::Tick(float DeltaTime)
 	
 	AIController->SetFocus(PlayerCharacter);
 	
-	if (bCanMagicRayAttack)
+	if (bCanMagicRayAttack & !bIsMeleeAttacking)
 	{
 		MagicRayAttack(50.0f, 2.0f, 1.0f);
 	}

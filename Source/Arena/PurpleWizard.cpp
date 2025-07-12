@@ -43,7 +43,7 @@ void APurpleWizard::Tick(float DeltaTime)
 		AIController->MoveToActor(PlayerCharacter, 40, false);
 		AIController->SetFocus(PlayerCharacter);
 	}
-		if (bCanMeleeAttack && !bIsMeleeAttacking)
+		if (bCanMeleeAttack && !bIsMeleeAttacking & !bIsMeleeAttacking)
 		{
 			Melee(50.0f);
 		}

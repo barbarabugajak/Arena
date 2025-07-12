@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "DamageInterface.h"
+#include "MagicRay.h"
 #include "GameFramework/Character.h"
 #include "EnemyBase.generated.h"
 
@@ -84,5 +85,8 @@ public:
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FSoundEffect);
 	UPROPERTY(EditAnywhere, BlueprintAssignable, Category = "Juice")
 	FSoundEffect MeleeSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Juice")
+	AMagicRay* RayRef;
 
 };

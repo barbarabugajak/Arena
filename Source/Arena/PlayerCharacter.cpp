@@ -210,7 +210,12 @@ void APlayerCharacter::MagicRayAttack()
 
 
 				AMagicRay* Ray = GetWorld()->SpawnActor<AMagicRay>(MyBPClass, Location, FRotator::ZeroRotator);
-				Ray->OnSpawned.Broadcast(0.3f);
+				if (Ray){
+					Ray->OnSpawned.Broadcast(0.3f);
+					RayRef = Ray;
+				}
+
+				
 				bCanMagicRayAttack = false;
 				
 				FTimerHandle TimerHandle;
@@ -332,6 +337,12 @@ void APlayerCharacter::ReceiveDamage(float DamageAmount, FString DamageType)
 		{
 			// UKismetSystemLibrary::QuitGame(GetWorld(), UGameplayStatics::GetPlayerController(GetWorld(), 0), EQuitPreference::Quit, false);
 			bIsAlive = false;
+
+			if (RayRef)
+			{
+				RayRef->Destroy();
+			}
+			
 			ShowLoseScreen.Broadcast();
 			UGameplayStatics::SetGamePaused(GetWorld(), true);
 		}
