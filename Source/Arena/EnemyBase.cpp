@@ -67,7 +67,7 @@ void AEnemyBase::ReceiveDamage(float DamageAmount, FString DamageType)
 		bIsDead = true;
 		if (RayRef)
 		{
-			Destroy();
+			RayRef->Destroy();
 		}
 		FTimerHandle TimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(
