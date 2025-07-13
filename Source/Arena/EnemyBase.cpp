@@ -29,7 +29,14 @@ void AEnemyBase::Tick(float DeltaTime)
 
 	if (bCanMagicRayAttack && !bIsDead)
 	{
-		MagicRayAttack(900.0f, 100.0f, 0.9f);
+		float RandDelayFactor = FMath::RandRange(-0.2, 0.9);
+		FTimerHandle TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(
+			TimerHandle,
+			[this]()
+			{
+				MagicRayAttack(900.0f, 100.0f, 0.9f);
+			}, RandDelayFactor, false);
 	}
 
 }
@@ -70,6 +77,10 @@ void AEnemyBase::ReceiveDamage(float DamageAmount, FString DamageType)
 			RayRef->Destroy();
 		}
 		FTimerHandle TimerHandle;
+
+		SetActorEnableCollision(false);
+		
+		
 		GetWorld()->GetTimerManager().SetTimer(
 			TimerHandle,
 			[this]()
