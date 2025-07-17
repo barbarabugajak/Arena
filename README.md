@@ -6,7 +6,8 @@
 
 
 ## 🕹️ How To Play
-
+Play on itch.io: https://barbug-dev.itch.io/arena
+OR
 1. Download and install the game or clone the repository.
 2. Launch the executable or open the project in Unreal Editor.
 
