@@ -61,9 +61,9 @@ void APlayerCharacter::Tick(float DeltaTime)
 	}
 
 
-	if (!(bIsHealing || bIsMeleeAttacking))
+	if (bIsHealing && !bIsMeleeAttacking)
 	{
-		BlockMeter = FMath::Min(
+		Health = FMath::Min(
 			MaxHealth,
 			Health + HealAmount
 			);
