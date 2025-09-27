@@ -75,9 +75,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	bool bCanMagicRayAttack = true;
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDamage, float, DamageAmount);
-	UPROPERTY(EditAnywhere, BlueprintAssignable, Category = "DamageIndicator")
-	FOnDamage DamageIndicatorDelegate;
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnDamage, float, DamageAmount, FString, DamageType);
+	UPROPERTY(EditAnywhere, BlueprintAssignable, Category = "DamageIndicatorEvent")
+	FOnDamage IndicateDamageDelegate;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Juice")
 	float PushValue = 1000.0f;

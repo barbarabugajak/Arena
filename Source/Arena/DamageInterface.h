@@ -24,4 +24,6 @@ class ARENA_API IDamageInterface
 	public:
 		virtual void ReceiveDamage(float DamageAmount, FString DamageType) = 0;
 		virtual void CauseDamageToAnotherActor(AActor* OtherActor, float DamageAmount, FString DamageType) = 0;
+		UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "DamageInterface")
+		void ShowDamageOverlay(const FString& DamageType);
 };

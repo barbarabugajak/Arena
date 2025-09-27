@@ -62,7 +62,7 @@ void AEnemyBase::ReceiveDamage(float DamageAmount, FString DamageType)
 	if (!Player) return;
 	
 	GetCharacterMovement()->Launch(GetActorForwardVector()*-PushValue);
-	DamageIndicatorDelegate.Broadcast(DamageAmount);
+	IndicateDamageDelegate.Broadcast(DamageAmount, DamageType);
 	
 	if (Health <= 0)
 	{
@@ -80,6 +80,13 @@ void AEnemyBase::ReceiveDamage(float DamageAmount, FString DamageType)
 				Destroy();
 			}, 2.0f, false);
 		
+	} else
+	{
+		// if (this->GetClass()->ImplementsInterface(UDamageInterface::StaticClass()))
+		// {
+		// 	IDamageInterface::Execute_ShowDamageOverlay(this, DamageType);
+		// }
+
 	}
 }
 

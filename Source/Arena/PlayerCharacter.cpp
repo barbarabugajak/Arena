@@ -283,8 +283,8 @@ void APlayerCharacter::StopBlocking(const FInputActionValue& Value)
 
 void APlayerCharacter::ReceiveDamage(float DamageAmount, FString DamageType)
 {
-		if (DamageAmount > 0)
-		{
+		if (DamageAmount <= 0) return;
+		
 			
 			
 			if (bIsBlocking)
@@ -318,7 +318,7 @@ void APlayerCharacter::ReceiveDamage(float DamageAmount, FString DamageType)
 				}
 			}
 			
-		}
+		
 
 		if (Health <= 10)
 		{

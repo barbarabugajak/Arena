@@ -42,8 +42,7 @@ void AMagicRay::Tick(float DeltaTime)
 
 void AMagicRay::HandleOverlap(AActor* OverlappedActor, AActor* OtherActor)
 {
-
-	if (OtherActor || OtherActor == this) return;
+	if (!OtherActor || OtherActor == this) return;
 	
 	if (!OtherActor->GetClass()->ImplementsInterface(UDamageInterface::StaticClass())) return;
 		
