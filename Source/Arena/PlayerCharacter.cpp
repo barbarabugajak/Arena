@@ -41,13 +41,10 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
-	if (ShieldComponent != nullptr)
-	{
-		ShieldComponent->SetVisibility(false, true);	
-	} else
-	{
-		UE_LOG(LogTemp, Error, TEXT("Shield not accessible"));
-	}
+	if (ShieldComponent == nullptr) return;
+	
+	ShieldComponent->SetVisibility(false, true);	
+	
 }
 
 // Called every frame
@@ -55,27 +52,25 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (BlockMeter < MaxBlock && bIsBlocking == false && bIsMeleeAttacking == false)
+	if (!(bIsBlocking || bIsMeleeAttacking))
 	{
-		BlockMeter += 5 * DeltaTime;
+		BlockMeter = FMath::Min(
+			MaxBlock,
+			BlockMeter + (DeltaTime*5.0f)
+			);
 	}
 
 
-	if (bIsHealing == true && bIsMeleeAttacking == false)
+	if (!(bIsHealing || bIsMeleeAttacking))
 	{
-		if (HealAmount + Health > MaxHealth)
-		{
-			Health = MaxHealth;
-		} else
-		{
-			Health += HealAmount;
-			if (Health > 10)
-			{
-				if (TintHandler)
-				{
-					TintHandler->PlayerLowHealthOff.Broadcast();
-				}
-			}
+		BlockMeter = FMath::Min(
+			MaxHealth,
+			Health + HealAmount
+			);
+		
+		
+		if (Health > 10 && TintHandler){
+			TintHandler->PlayerLowHealthOff.Broadcast();
 		}
 		bIsHealing = false;
 	}

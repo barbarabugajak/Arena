@@ -42,24 +42,21 @@ void AMagicRay::Tick(float DeltaTime)
 
 void AMagicRay::HandleOverlap(AActor* OverlappedActor, AActor* OtherActor)
 {
-	UE_LOG(LogTemp, Display, TEXT("AMagicRay::HandleOverlap"));
-	if (OtherActor && OtherActor != this)
+
+	if (OtherActor || OtherActor == this) return;
+	
+	if (!OtherActor->GetClass()->ImplementsInterface(UDamageInterface::StaticClass())) return;
+		
+	IDamageInterface* Actor = Cast<IDamageInterface>(OtherActor);
+	
+	if (!Actor) return;
+
+	if (!OverlappedActors.Contains(OtherActor))
 	{
-		if (OtherActor->GetClass()->ImplementsInterface(UDamageInterface::StaticClass()))
-		{
-			if (IDamageInterface* Actor = Cast<IDamageInterface>(OtherActor))
-			{
-				if (!OverlappedActors.Contains(OtherActor))
-				{
-					UE_LOG(LogTemp, Display, TEXT("AMagicRay::HandleOverlap - DamageInterface"));
-					Actor->ReceiveDamage(6.0f, "Magic");
-				} else
-				{
-					OverlappedActors.Add(OtherActor);
-				}
-				
-			}
-		}
+		Actor->ReceiveDamage(6.0f, "Magic");
+	} else
+	{
+		OverlappedActors.Add(OtherActor);
 	}
 	
 }

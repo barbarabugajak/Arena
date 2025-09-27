@@ -27,17 +27,17 @@ void AEnemyBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (bCanMagicRayAttack && !bIsDead)
-	{
-		float RandDelayFactor = FMath::RandRange(-0.2, 0.9);
-		FTimerHandle TimerHandle;
-		GetWorld()->GetTimerManager().SetTimer(
+	if (!bCanMagicRayAttack || bIsDead) return;
+	
+	float RandDelayFactor = FMath::RandRange(-0.2, 0.9);
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(
 			TimerHandle,
 			[this]()
 			{
 				MagicRayAttack(900.0f, 100.0f, 0.9f);
 			}, RandDelayFactor, false);
-	}
+	
 
 }
 
@@ -50,36 +50,28 @@ void AEnemyBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 void AEnemyBase::ReceiveDamage(float DamageAmount, FString DamageType)
 {
+	if (DamageAmount <= 0) return;
 	
-	if (DamageAmount > 0)
-	{
-		Health -= DamageAmount;
-		UE_LOG(LogTemp, Warning, TEXT("Damage Amount: %f"), DamageAmount);
-		UE_LOG(LogTemp, Warning, TEXT("Health: %f"), Health);
+	Health -= DamageAmount;
+	UE_LOG(LogTemp, Warning, TEXT("Damage Amount: %f"), DamageAmount);
+	UE_LOG(LogTemp, Warning, TEXT("Health: %f"), Health);
 
-		// Be pushed away
-		APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-		if (Player)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Is pushed away"));
-			GetCharacterMovement()->Launch(GetActorForwardVector()*-PushValue);
-		}
+	// Be pushed away
+	APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 
-		// Damage indicator
-		DamageIndicatorDelegate.Broadcast(DamageAmount);
-
-	}
+	if (!Player) return;
+	
+	GetCharacterMovement()->Launch(GetActorForwardVector()*-PushValue);
+	DamageIndicatorDelegate.Broadcast(DamageAmount);
+	
 	if (Health <= 0)
 	{
 		bIsDead = true;
-		if (RayRef)
-		{
-			RayRef->Destroy();
-		}
+		if (RayRef) RayRef->Destroy();
+		
 		FTimerHandle TimerHandle;
 
 		SetActorEnableCollision(false);
-		
 		
 		GetWorld()->GetTimerManager().SetTimer(
 			TimerHandle,
@@ -88,47 +80,44 @@ void AEnemyBase::ReceiveDamage(float DamageAmount, FString DamageType)
 				Destroy();
 			}, 2.0f, false);
 		
-		
-		
 	}
 }
 
 void AEnemyBase::CauseDamageToAnotherActor(AActor* OtherActor, float DamageAmount, FString DamageType)
 {
-	if (OtherActor != nullptr)
+	if (OtherActor == nullptr) return;
+	
+	if (IDamageInterface* DamageTarget = Cast<IDamageInterface>(OtherActor))
 	{
-		if (IDamageInterface* DamageTarget = Cast<IDamageInterface>(OtherActor))
-		{
-			DamageTarget->ReceiveDamage(DamageAmount, DamageType);
-		}
+		DamageTarget->ReceiveDamage(DamageAmount, DamageType);
 	}
+	
 }
 
 
 void AEnemyBase::Melee(float Distance)
 {
-	if (bCanMeleeAttack && !bIsMeleeAttacking)
-	{
-		TArray<AActor*> OverlappingActors = bIsPlayerNearby(Distance);
+	if (!bCanMeleeAttack || bIsMeleeAttacking) return;
+	
+	TArray<AActor*> OverlappingActors = bIsPlayerNearby(Distance);
 		
-		if (OverlappingActors.Num() > 0)
-		{
-			APlayerCharacter* Player = Cast<APlayerCharacter>(OverlappingActors[0]); // Well, there's only one player
-			if (Player)
-			{
-				// Melee Attack
-				MeleeSound.Broadcast();
-				bIsMeleeAttacking = true;
-				bCanMeleeAttack = false;
-			}
-		}
+	if (OverlappingActors.Num() > 0)
+	{
+		APlayerCharacter* Player = Cast<APlayerCharacter>(OverlappingActors[0]); // Well, there's only one player
+		if (!Player) return;
+			
+		// Melee Attack
+		MeleeSound.Broadcast();
+		bIsMeleeAttacking = true;
+		bCanMeleeAttack = false;
+			
 	}
+	
 }
 
 
 void AEnemyBase::EndMeleeAttack()
 {
-	UE_LOG(LogTemp, Warning, TEXT("End of Melee Attack"));
 	bIsMeleeAttacking = false;
 
 	TArray<AActor*> OverlappingActors = bIsPlayerNearby(45.0f);
@@ -152,37 +141,35 @@ void AEnemyBase::EndMeleeAttack()
 
 void AEnemyBase::MagicRayAttack(float Range, float Disortion, float Delay)
 {
-	if (bCanMagicRayAttack)
-	{
-		UE_LOG(LogTemp, Log, TEXT("Magic Ray Attack!"))
-		TArray<AActor*> Player = bIsPlayerNearby(Range);
-		if (Player.Num() > 0)
-		{
-			if (Player[0]->IsValidLowLevel())
-			{
-				// Add some randomness
-				FVector Location = Player[0]->GetActorLocation() + FVector(FMath::RandRange(-Disortion, Disortion), FMath::RandRange(-Disortion, Disortion), 0);;
+	if (!bCanMagicRayAttack) return;
+	
+	TArray<AActor*> Player = bIsPlayerNearby(Range);
+	
+	if (Player.Num() <= 0) return;
+	
+	if (!Player[0]->IsValidLowLevel()) return;
+	
+	// Add some randomness
+	FVector Location = Player[0]->GetActorLocation() + FVector(FMath::RandRange(-Disortion, Disortion), FMath::RandRange(-Disortion, Disortion), 0);;
 				
-				AMagicRay* Ray = GetWorld()->SpawnActor<AMagicRay>(MyBPClass, Location, FRotator::ZeroRotator);
-				if (Ray)
-				{
-					Ray->OnSpawned.Broadcast(Delay);
-					RayRef = Ray;
-				}
+	AMagicRay* Ray = GetWorld()->SpawnActor<AMagicRay>(MyBPClass, Location, FRotator::ZeroRotator);
+	if (!Ray) return;
+	
+	Ray->OnSpawned.Broadcast(Delay);
+	RayRef = Ray;
+	
 					
-				bCanMagicRayAttack = false;
-				
-				FTimerHandle TimerHandle;
-				// Cooldown
-				GetWorld()->GetTimerManager().SetTimer(
-				TimerHandle,
-				[this]()
+	bCanMagicRayAttack = false;
+			
+	FTimerHandle TimerHandle;
+	// Cooldown
+	GetWorld()->GetTimerManager().SetTimer(
+			TimerHandle,
+			[this]()
 				{
 					bCanMagicRayAttack = true;
-				}, 3.0f, false);
-			}
-		}
-	}
+				},3.0f, false);
+	
 }
 
 

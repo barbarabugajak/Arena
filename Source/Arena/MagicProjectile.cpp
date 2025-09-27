@@ -11,7 +11,6 @@
 // Sets default values
 AMagicProjectile::AMagicProjectile()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	
 	CollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("Collision Component"));
@@ -59,21 +58,20 @@ void AMagicProjectile::HandleOverlap(UPrimitiveComponent* OverlappedComponent, A
                        				   UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
                        				   bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (OtherActor && OtherActor != this)
-	{
-		if (!OtherActor->ActorHasTag("Player"))
-		{
-			UE_LOG(LogTemp, Display, TEXT("Overlapper: %s"), *OtherActor->GetClass()->GetName());
+	if (!OtherActor || OtherActor == this) return;
+	
+	if (OtherActor->ActorHasTag("Player")) return;
+		
+	UE_LOG(LogTemp, Display, TEXT("Overlapper: %s"), *OtherActor->GetClass()->GetName());
 			
-			if (IDamageInterface* Hittable = Cast<IDamageInterface>(OtherActor))
-			{
-				UE_LOG(LogTemp, Warning, TEXT("Hit by a Magic Projectile"));	
-				Hittable->ReceiveDamage(10.0f, "Magic");
-			}
-
-			Destroy();
-		}
+	if (IDamageInterface* Hittable = Cast<IDamageInterface>(OtherActor))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Hit by a Magic Projectile"));
+		Hittable->ReceiveDamage(10.0f, "Magic");
 	}
+
+	Destroy();
+	
 }
 
 
