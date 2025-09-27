@@ -132,48 +132,47 @@ void APlayerCharacter::CameraRotation(const FInputActionValue& Value)
 void APlayerCharacter::MoveForward(const FInputActionValue& Value)
 {
 	float FwdValue = Value.Get<float>();
-	if (FwdValue != 0)
-	{
-		const FRotator YawRotation(0, GetControlRotation().Yaw, 0);
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-		AddMovementInput(Direction, FwdValue);
-	}
+	if (FwdValue == 0) return;
+	
+	const FRotator YawRotation(0, GetControlRotation().Yaw, 0);
+	const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+	AddMovementInput(Direction, FwdValue);
+	
 }
 
 void APlayerCharacter::MoveRight(const FInputActionValue& Value)
 {
 	float RightValue = Value.Get<float>();
-	if (RightValue != 0)
-	{
-		const FRotator Rot(0, GetControlRotation().Yaw, 0);
-		const FVector Direction = FRotationMatrix(Rot).GetUnitAxis(EAxis::Y);
-		AddMovementInput(Direction, RightValue);
-	}
+	if (RightValue == 0) return;
+	
+	const FRotator Rot(0, GetControlRotation().Yaw, 0);
+	const FVector Direction = FRotationMatrix(Rot).GetUnitAxis(EAxis::Y);
+	AddMovementInput(Direction, RightValue);
+	
 }
 
 void APlayerCharacter::MeleeAttack()
 {
-	if (bCanMeleeAttack)
+	if (!bCanMeleeAttack) return;
+	
+		
+	bIsMeleeAttacking = true;
+	bCanMeleeAttack = false;
+	UE_LOG(LogTemp, Warning, TEXT("Attacking!"))
+	TArray<AActor*> Enemies = EnemiesNearby(100.0f); // Seems about right :)
+		
+	if (Enemies.Num() <= 0) return;
+		
+	for (AActor* EnemyHit: Enemies)
 	{
-		
-		bIsMeleeAttacking = true;
-		bCanMeleeAttack = false;
-		UE_LOG(LogTemp, Warning, TEXT("Attacking!"))
-		TArray<AActor*> Enemies = EnemiesNearby(100.0f); // Seems about right :)
-		
-		if (Enemies.Num() > 0)
+		if (IDamageInterface* HitActor = Cast<IDamageInterface>(EnemyHit))
 		{
-			for (AActor* EnemyHit: Enemies)
-			{
-				if (IDamageInterface* HitActor = Cast<IDamageInterface>(EnemyHit))
-				{
-					HitActor->ReceiveDamage(5.0f, "Melee");
-				}
-			}
+			HitActor->ReceiveDamage(5.0f, "Melee");
 		}
+	}
 
 		SoundEffect.Broadcast("Melee");
-	}
+	
 }
 
 void APlayerCharacter::EndMeleeAttack()
@@ -192,72 +191,66 @@ void APlayerCharacter::EndMeleeAttack()
 
 void APlayerCharacter::MagicRayAttack()
 {
-	if (bCanMagicRayAttack)
-	{
-		UE_LOG(LogTemp, Log, TEXT("Magic Ray Attack!"))
-		TArray<AActor*> Enemies = EnemiesNearby(600.0f);
-		if (Enemies.Num() > 0)
+	if (!bCanMagicRayAttack) return;
+
+	UE_LOG(LogTemp, Log, TEXT("Magic Ray Attack!"))
+	TArray<AActor*> Enemies = EnemiesNearby(600.0f);
+	
+		if (Enemies.Num() <= 0) return;
+		
+		if (!Enemies[0]->IsValidLowLevel()) return;
+			
+		// Add some randomness
+		FVector Location = Enemies[0]->GetActorLocation() + FVector(FMath::RandRange(-80, 80), FMath::RandRange(-80, 80), 0);;
+	
+		if (AMagicRay* Ray = GetWorld()->SpawnActor<AMagicRay>(MyBPClass, Location, FRotator::ZeroRotator))
 		{
-			if (Enemies[0]->IsValidLowLevel())
-			{
-				// Add some randomness
-				FVector Location = Enemies[0]->GetActorLocation() + FVector(FMath::RandRange(-80, 80), FMath::RandRange(-80, 80), 0);;
-
-
-				AMagicRay* Ray = GetWorld()->SpawnActor<AMagicRay>(MyBPClass, Location, FRotator::ZeroRotator);
-				if (Ray){
-					Ray->OnSpawned.Broadcast(0.3f);
-					RayRef = Ray;
-				}
+			Ray->OnSpawned.Broadcast(0.3f);
+			RayRef = Ray;
+		}
 
 				
-				bCanMagicRayAttack = false;
+		bCanMagicRayAttack = false;
 				
-				FTimerHandle TimerHandle;
-				// Cooldown
-				GetWorld()->GetTimerManager().SetTimer(
+		FTimerHandle TimerHandle;
+		// Cooldown
+		GetWorld()->GetTimerManager().SetTimer(
 				TimerHandle,
 				[this]()
 				{
 					bCanMagicRayAttack = true;
 				}, 3.0f, false);
-			}
-		}
-	}
+
 }
 
 void APlayerCharacter::LaunchMagicProjectile()
 {
 	
-	if (bCanProjectileAttack && MagicProjectile_BPClass->IsValidLowLevel()) 
-	{
-		TArray<AActor*> Enemies = EnemiesNearby(800.0f);
-		if (Enemies.Num() > 0)
-		{
-			if (Enemies[0]->IsValidLowLevel())
-			{
-				FVector ProjectileAim = Enemies[0]->GetActorLocation();
+	if (!bCanProjectileAttack || !MagicProjectile_BPClass->IsValidLowLevel()) return;
+	
+	TArray<AActor*> Enemies = EnemiesNearby(800.0f);
+		if (Enemies.Num() <= 0) return;
+		
+		if (!Enemies[0]->IsValidLowLevel()) return;
+			
+		FVector ProjectileAim = Enemies[0]->GetActorLocation();
 
-				FActorSpawnParameters SpawnParams;
-				SpawnParams.Owner = this;
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = this;
 
-				FVector Location = GetMesh()->GetSocketLocation("Weapon");
+		FVector Location = GetMesh()->GetSocketLocation("Weapon");
 				
-				// DrawDebugBox(GetWorld(),Location, FVector(10.0f, 10.0f, 10.0f), FColor::Red, true, 1000.0f );
-				GetWorld()->SpawnActor<AMagicProjectile>(MagicProjectile_BPClass, Location, GetActorRotation(), SpawnParams);
+		// DrawDebugBox(GetWorld(),Location, FVector(10.0f, 10.0f, 10.0f), FColor::Red, true, 1000.0f );
+		GetWorld()->SpawnActor<AMagicProjectile>(MagicProjectile_BPClass, Location, GetActorRotation(), SpawnParams);
 
-				bCanProjectileAttack = false;
+		bCanProjectileAttack = false;
 
-				FTimerHandle TimerHandle;
-				GetWorld()->GetTimerManager().SetTimer(TimerHandle, [this]()
+		FTimerHandle TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, [this]()
 				{
 					bCanProjectileAttack = true;
 				}, 2.0f, false);
-				
-			}
-		}
-		
-	}
+	
 }
 
 
@@ -284,39 +277,33 @@ void APlayerCharacter::StopBlocking(const FInputActionValue& Value)
 void APlayerCharacter::ReceiveDamage(float DamageAmount, FString DamageType)
 {
 		if (DamageAmount <= 0) return;
-		
 			
-			
-			if (bIsBlocking)
+		if (bIsBlocking)
+		{
+			if (DamageAmount <= BlockMeter && bIsBlocking)
 			{
-				if (DamageAmount <= BlockMeter && bIsBlocking)
-				{
-					BlockMeter -= DamageAmount;
-				} else
-				{
-					bIsBlocking = false;
-					BlockMeter = 0;
-					StopBlocking(1);
-					Health -= DamageAmount;
-
-					if (TintHandler)
-					{
-						TintHandler->PlayerDamage.Broadcast();
-					}
-
-					
-				}
+				BlockMeter = FMath::Max(BlockMeter - DamageAmount, 0); // Prevent it from getting negative
 			} else
 			{
+				bIsBlocking = false;
+				BlockMeter = 0;
+				StopBlocking(1);
 				Health -= DamageAmount;
-				UE_LOG(LogTemp, Warning, TEXT("Damage Amount: %f"), DamageAmount);
-				UE_LOG(LogTemp, Warning, TEXT("Health: %f"), Health);
 
 				if (TintHandler)
 				{
 					TintHandler->PlayerDamage.Broadcast();
 				}
 			}
+		} else
+		{
+			Health -= DamageAmount;
+
+			if (TintHandler)
+			{
+				TintHandler->PlayerDamage.Broadcast();
+			}
+		}
 			
 		
 
