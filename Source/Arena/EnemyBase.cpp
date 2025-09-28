@@ -80,13 +80,6 @@ void AEnemyBase::ReceiveDamage(float DamageAmount, FString DamageType)
 				Destroy();
 			}, 2.0f, false);
 		
-	} else
-	{
-		// if (this->GetClass()->ImplementsInterface(UDamageInterface::StaticClass()))
-		// {
-		// 	IDamageInterface::Execute_ShowDamageOverlay(this, DamageType);
-		// }
-
 	}
 }
 
@@ -149,7 +142,7 @@ void AEnemyBase::EndMeleeAttack()
 void AEnemyBase::MagicRayAttack(float Range, float Disortion, float Delay)
 {
 	if (!bCanMagicRayAttack) return;
-	
+	if (!GetWorld()) return;
 	TArray<AActor*> Player = bIsPlayerNearby(Range);
 	
 	if (Player.Num() <= 0) return;

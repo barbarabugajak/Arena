@@ -32,4 +32,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintAssignable, Category = "Juice")
 	FOnTintHandler PlayerLowHealthOff;
+
+	UPROPERTY(EditAnywhere, BlueprintAssignable, Category = "Juice")
+	FOnTintHandler PlayerIsHealing;	
 };

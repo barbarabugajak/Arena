@@ -112,6 +112,10 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 void APlayerCharacter::Heal(const FInputActionValue& Value)
 {
 	ChangeAmountOfPotions.Broadcast();
+	if (TintHandler)
+	{
+		TintHandler->PlayerIsHealing.Broadcast();
+	}
 	UE_LOG(LogTemp, Log, TEXT("Healing"));
 }
 
