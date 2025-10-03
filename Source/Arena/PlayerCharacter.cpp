@@ -159,10 +159,27 @@ void APlayerCharacter::MeleeAttack()
 {
 	if (!bCanMeleeAttack) return;
 	
-		
 	bIsMeleeAttacking = true;
 	bCanMeleeAttack = false;
 	UE_LOG(LogTemp, Warning, TEXT("Attacking!"))
+	
+
+		SoundEffect.Broadcast("Melee");
+	
+}
+
+void APlayerCharacter::EndMeleeAttack()
+{
+	bIsMeleeAttacking = false;
+
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(
+		TimerHandle,
+		[this]()
+		{
+			bCanMeleeAttack = true;
+		}, 0.2f, false); // Needs to be a short while, due to anims
+
 	TArray<AActor*> Enemies = EnemiesNearby(100.0f); // Seems about right :)
 		
 	if (Enemies.Num() <= 0) return;
@@ -174,22 +191,7 @@ void APlayerCharacter::MeleeAttack()
 			HitActor->ReceiveDamage(5.0f, "Melee");
 		}
 	}
-
-		SoundEffect.Broadcast("Melee");
 	
-}
-
-void APlayerCharacter::EndMeleeAttack()
-{
-	bIsMeleeAttacking = false;
-	FTimerHandle TimerHandle;
-
-	GetWorld()->GetTimerManager().SetTimer(
-		TimerHandle,
-		[this]()
-		{
-			bCanMeleeAttack = true;
-		}, 0.2f, false); // Needs to be a short while, due to anims
 }
 
 
