@@ -28,15 +28,11 @@ void AEnemyBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	if (!bCanMagicRayAttack || bIsDead) return;
+
+	if (!GetWorld()) return;
 	
 	float RandDelayFactor = FMath::RandRange(-0.2, 0.9);
 	FTimerHandle TimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(
-			TimerHandle,
-			[this]()
-			{
-				MagicRayAttack(900.0f, 100.0f, 0.9f);
-			}, RandDelayFactor, false);
 	
 
 }
@@ -142,7 +138,9 @@ void AEnemyBase::EndMeleeAttack()
 void AEnemyBase::MagicRayAttack(float Range, float Disortion, float Delay)
 {
 	if (!bCanMagicRayAttack) return;
-	if (!GetWorld()) return;
+	
+	if (!Range || !Disortion || !Delay) return;
+
 	TArray<AActor*> Player = bIsPlayerNearby(Range);
 	
 	if (Player.Num() <= 0) return;
@@ -176,6 +174,11 @@ void AEnemyBase::MagicRayAttack(float Range, float Disortion, float Delay)
 TArray<AActor*> AEnemyBase::bIsPlayerNearby(float Distance)
 {
 	TArray<AActor*> HitResults;
+
+	UWorld* World = GetWorld();
+	
+	if (!World) return HitResults;
+	
 	FCollisionQueryParams Params;
 	Params.AddIgnoredActor(this);
 	TArray < TEnumAsByte < EObjectTypeQuery > > ObjectTypes;

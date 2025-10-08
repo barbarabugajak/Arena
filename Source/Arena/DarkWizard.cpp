@@ -44,10 +44,12 @@ void ADarkWizard::Tick(float DeltaTime)
 	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 	
 	AIController->SetFocus(PlayerCharacter);
+
 	
+	UE_LOG(LogTemp, Warning, TEXT("Dark wizard attacks"));
 	if (bCanMagicRayAttack & !bIsMeleeAttacking)
 	{
-		MagicRayAttack(50.0f, 2.0f, 1.0f);
+		MagicRayAttack(600.0f, 80.0f, 1.0f);
 	}
 
 

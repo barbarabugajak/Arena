@@ -164,12 +164,16 @@ void APlayerCharacter::MeleeAttack()
 	UE_LOG(LogTemp, Warning, TEXT("Attacking!"))
 	
 
-		SoundEffect.Broadcast("Melee");
+	SoundEffect.Broadcast("Melee");
 	
 }
 
 void APlayerCharacter::EndMeleeAttack()
 {
+	if (!bIsAlive) return;
+	if (!GetWorld()) return;
+
+
 	bIsMeleeAttacking = false;
 
 	FTimerHandle TimerHandle;
@@ -198,7 +202,8 @@ void APlayerCharacter::EndMeleeAttack()
 void APlayerCharacter::MagicRayAttack()
 {
 	if (!bCanMagicRayAttack) return;
-
+	if (!GetWorld()) return;
+	
 	UE_LOG(LogTemp, Log, TEXT("Magic Ray Attack!"))
 	TArray<AActor*> Enemies = EnemiesNearby(600.0f);
 	
@@ -325,11 +330,30 @@ void APlayerCharacter::ReceiveDamage(float DamageAmount, FString DamageType)
 		{
 			// UKismetSystemLibrary::QuitGame(GetWorld(), UGameplayStatics::GetPlayerController(GetWorld(), 0), EQuitPreference::Quit, false);
 			bIsAlive = false;
-
+	
 			if (RayRef)
 			{
 				RayRef->Destroy();
 			}
+
+			TArray<AActor*> Enemies;
+			UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemyBase::StaticClass(), Enemies);
+			
+			for (AActor* Actor : Enemies)
+			{
+				GetWorld()->GetTimerManager().ClearAllTimersForObject(Actor);
+			}
+			
+			GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
+
+			TArray<AActor*> Rays;
+			UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMagicRay::StaticClass(), Rays);
+
+			for (AActor* Actor : Rays)
+			{
+				Actor->Destroy();
+			}
+			
 			
 			ShowLoseScreen.Broadcast();
 			UGameplayStatics::SetGamePaused(GetWorld(), true);
