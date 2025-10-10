@@ -158,7 +158,9 @@ void AEnemyBase::MagicRayAttack(float Range, float Disortion, float Delay)
 	
 					
 	bCanMagicRayAttack = false;
-			
+	
+	float RandDelay = 3 + FMath::RandRange(1, 10) * 0.1;
+
 	FTimerHandle TimerHandle;
 	// Cooldown
 	GetWorld()->GetTimerManager().SetTimer(
@@ -166,7 +168,7 @@ void AEnemyBase::MagicRayAttack(float Range, float Disortion, float Delay)
 			[this]()
 				{
 					bCanMagicRayAttack = true;
-				},3.0f, false);
+				},RandDelay , false);
 	
 }
 
