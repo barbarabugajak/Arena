@@ -105,8 +105,58 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInput->BindAction(IA_MagicProjectile, ETriggerEvent::Triggered, this, &APlayerCharacter::LaunchMagicProjectile);
 		EnhancedInput->BindAction(IA_Esc, ETriggerEvent::Triggered, this, &APlayerCharacter::QuitGame);
 		EnhancedInput->BindAction(IA_Potion, ETriggerEvent::Started, this, &APlayerCharacter::Heal);
+		EnhancedInput->BindAction(IA_GamepadCursorX, ETriggerEvent::Triggered, this, &APlayerCharacter::GamepadCursorInputX);
+		EnhancedInput->BindAction(IA_GamepadCursorY, ETriggerEvent::Triggered, this, &APlayerCharacter::GamepadCursorInputY);
+		EnhancedInput->BindAction(IA_GamepadPressed, ETriggerEvent::Triggered, this, &APlayerCharacter::GamepadPressed);
 	}
 
+}
+
+void APlayerCharacter::GamepadCursorInputX(const FInputActionValue& Value) {
+
+	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	
+	FVector2D GamepadInputVector = Value.Get<FVector2D>();
+
+	int ValX = (int)GamepadInputVector.X;
+	int ValY = (int)GamepadInputVector.Y;
+
+	if (ValX == 0) return;
+
+	FViewport* Viewport = Cast<ULocalPlayer>(PC->GetLocalPlayer())->ViewportClient->Viewport;
+
+	if (!Viewport) return;
+
+	int NewPositionX = (ValX * gamepadSens) + Viewport->GetMouseX();
+	int NewPositionY = (ValY * gamepadSens) + Viewport->GetMouseY();
+
+	Viewport->SetMouse(NewPositionX, NewPositionY);
+}
+
+void APlayerCharacter::GamepadCursorInputY(const FInputActionValue& Value) {
+
+	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+
+	FVector2D GamepadInputVector = Value.Get<FVector2D>();
+
+	int ValY = (int)GamepadInputVector.Y;
+
+	UE_LOG(LogTemp, Display, TEXT("Value is %d"), (int)GamepadInputVector.Y);
+
+	if (ValY == 0) return;
+
+	FViewport* Viewport = Cast<ULocalPlayer>(PC->GetLocalPlayer())->ViewportClient->Viewport;
+
+	if (!Viewport) return;
+
+	int NewPositionY = (ValY * gamepadSens) + Viewport->GetMouseY();
+
+	Viewport->SetMouse(Viewport->GetMouseX(), NewPositionY);
+}
+
+void APlayerCharacter::GamepadPressed(const FInputActionValue& Value) {
+
+	// Get current cursor position and press
 }
 
 void APlayerCharacter::Heal(const FInputActionValue& Value)

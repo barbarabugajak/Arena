@@ -61,12 +61,33 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	UInputAction* IA_Potion;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement | Gamepad")
+	UInputAction* IA_GamepadCursorX;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement | Gamepad")
+	UInputAction* IA_GamepadCursorY;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+	UInputAction* IA_GamepadPressed;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+	float gamepadSens = 5;
+
 	UFUNCTION()
 	void MoveForward(const FInputActionValue& Value);
 
 	UFUNCTION()
 	void MoveRight(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void GamepadCursorInputX(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void GamepadCursorInputY(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void GamepadPressed(const FInputActionValue& Value);
 
 	// Attack
 	UFUNCTION()
