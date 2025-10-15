@@ -112,6 +112,14 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 }
 
+void APlayerCharacter::GamepadPressed(const FInputActionValue& Value) {
+	if (!CurrentlyHoveredButton) return;
+
+	CurrentlyHoveredButton->OnClicked.Broadcast();
+
+	CurrentlyHoveredButton = nullptr;
+}
+
 void APlayerCharacter::GamepadCursorInputX(const FInputActionValue& Value) {
 
 	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
@@ -154,10 +162,6 @@ void APlayerCharacter::GamepadCursorInputY(const FInputActionValue& Value) {
 	Viewport->SetMouse(Viewport->GetMouseX(), NewPositionY);
 }
 
-void APlayerCharacter::GamepadPressed(const FInputActionValue& Value) {
-
-	// Get current cursor position and press
-}
 
 void APlayerCharacter::Heal(const FInputActionValue& Value)
 {
@@ -207,7 +211,9 @@ void APlayerCharacter::MoveRight(const FInputActionValue& Value)
 
 void APlayerCharacter::MeleeAttack()
 {
+	if (!GetWorld()) return;
 	if (!bCanMeleeAttack) return;
+	if (UGameplayStatics::IsGamePaused(GetWorld())) return;
 	
 	bIsMeleeAttacking = true;
 	bCanMeleeAttack = false;

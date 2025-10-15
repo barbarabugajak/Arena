@@ -12,7 +12,9 @@
 #include "TintHandler.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Components/Button.h"
 #include "PlayerCharacter.generated.h"
+
 
 UCLASS()
 class ARENA_API APlayerCharacter : public ACharacter, public IDamageInterface
@@ -88,6 +90,10 @@ public:
 
 	UFUNCTION()
 	void GamepadPressed(const FInputActionValue& Value);
+
+	// Gamepad only
+	UPROPERTY(BlueprintReadWrite, Category = "Input | Gamepad")
+	UButton* CurrentlyHoveredButton;
 
 	// Attack
 	UFUNCTION()
