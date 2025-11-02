@@ -105,8 +105,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInput->BindAction(IA_MagicProjectile, ETriggerEvent::Triggered, this, &APlayerCharacter::LaunchMagicProjectile);
 		EnhancedInput->BindAction(IA_Esc, ETriggerEvent::Triggered, this, &APlayerCharacter::QuitGame);
 		EnhancedInput->BindAction(IA_Potion, ETriggerEvent::Started, this, &APlayerCharacter::Heal);
-		EnhancedInput->BindAction(IA_GamepadCursorX, ETriggerEvent::Triggered, this, &APlayerCharacter::GamepadCursorInputX);
-		EnhancedInput->BindAction(IA_GamepadCursorY, ETriggerEvent::Triggered, this, &APlayerCharacter::GamepadCursorInputY);
+		EnhancedInput->BindAction(IA_GamepadCursorX, ETriggerEvent::Triggered, this, &APlayerCharacter::GamepadCursorInput);
 		EnhancedInput->BindAction(IA_GamepadPressed, ETriggerEvent::Triggered, this, &APlayerCharacter::GamepadPressed);
 	}
 
@@ -118,20 +117,22 @@ void APlayerCharacter::GamepadPressed(const FInputActionValue& Value) {
 	CurrentlyHoveredButton->OnClicked.Broadcast();
 
 	CurrentlyHoveredButton = nullptr;
+
+	UGameplayStatics::GetPlayerController(GetWorld(), 0)->FlushPressedKeys();
 }
 
-void APlayerCharacter::GamepadCursorInputX(const FInputActionValue& Value) {
+void APlayerCharacter::GamepadCursorInput(const FInputActionValue& Value) {
 
 	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	
 	FVector2D GamepadInputVector = Value.Get<FVector2D>();
 
-	int ValX = (int)GamepadInputVector.X;
-	int ValY = (int)GamepadInputVector.Y;
+	float ValX = (float)GamepadInputVector.X;
+	float ValY = (float)GamepadInputVector.Y;
 
-	UE_LOG(LogTemp, Log, TEXT("Val Y: %d; Val X: %d"), ValY, ValX);
+	UE_LOG(LogTemp, Log, TEXT("Val Y: %f; Val X: %f"), ValY, ValX);
 
-	if (ValX == 0) return;
+	if (ValX == 0 && ValY == 0) return;
 
 	FViewport* Viewport = Cast<ULocalPlayer>(PC->GetLocalPlayer())->ViewportClient->Viewport;
 
@@ -141,27 +142,6 @@ void APlayerCharacter::GamepadCursorInputX(const FInputActionValue& Value) {
 	int NewPositionY = (ValY * gamepadSens) + Viewport->GetMouseY();
 
 	Viewport->SetMouse(NewPositionX, NewPositionY);
-}
-
-void APlayerCharacter::GamepadCursorInputY(const FInputActionValue& Value) {
-
-	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-
-	FVector2D GamepadInputVector = Value.Get<FVector2D>();
-
-	int ValY = (int)GamepadInputVector.Y;
-
-	UE_LOG(LogTemp, Display, TEXT("Value is %d"), (int)GamepadInputVector.Y);
-
-	if (ValY == 0) return;
-
-	FViewport* Viewport = Cast<ULocalPlayer>(PC->GetLocalPlayer())->ViewportClient->Viewport;
-
-	if (!Viewport) return;
-
-	int NewPositionY = (ValY * gamepadSens) + Viewport->GetMouseY();
-
-	Viewport->SetMouse(Viewport->GetMouseX(), NewPositionY);
 }
 
 

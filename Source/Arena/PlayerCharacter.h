@@ -74,7 +74,7 @@ public:
 	UInputAction* IA_GamepadPressed;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
-	float gamepadSens = 5;
+	float gamepadSens = 10;
 
 	UFUNCTION()
 	void MoveForward(const FInputActionValue& Value);
@@ -83,10 +83,7 @@ public:
 	void MoveRight(const FInputActionValue& Value);
 
 	UFUNCTION()
-	void GamepadCursorInputX(const FInputActionValue& Value);
-
-	UFUNCTION()
-	void GamepadCursorInputY(const FInputActionValue& Value);
+	void GamepadCursorInput(const FInputActionValue& Value);
 
 	UFUNCTION()
 	void GamepadPressed(const FInputActionValue& Value);
