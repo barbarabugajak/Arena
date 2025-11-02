@@ -129,6 +129,8 @@ void APlayerCharacter::GamepadCursorInputX(const FInputActionValue& Value) {
 	int ValX = (int)GamepadInputVector.X;
 	int ValY = (int)GamepadInputVector.Y;
 
+	UE_LOG(LogTemp, Log, TEXT("Val Y: %d; Val X: %d"), ValY, ValX);
+
 	if (ValX == 0) return;
 
 	FViewport* Viewport = Cast<ULocalPlayer>(PC->GetLocalPlayer())->ViewportClient->Viewport;
