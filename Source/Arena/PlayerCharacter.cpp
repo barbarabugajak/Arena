@@ -147,11 +147,16 @@ void APlayerCharacter::GamepadCursorInput(const FInputActionValue& Value) {
 
 void APlayerCharacter::Heal(const FInputActionValue& Value)
 {
+	if (amountOfPotions <= 0) return;
+
 	ChangeAmountOfPotions.Broadcast();
-	if (TintHandler)
-	{
-		TintHandler->PlayerIsHealing.Broadcast();
-	}
+
+	amountOfPotions--;
+
+	if (!TintHandler) return;
+	
+	TintHandler->PlayerIsHealing.Broadcast();
+
 	UE_LOG(LogTemp, Log, TEXT("Healing"));
 }
 
@@ -222,7 +227,7 @@ void APlayerCharacter::EndMeleeAttack()
 			bCanMeleeAttack = true;
 		}, 0.2f, false); // Needs to be a short while, due to anims
 
-	TArray<AActor*> Enemies = EnemiesNearby(100.0f); // Seems about right :)
+	TArray<AActor*> Enemies = EnemiesNearby(90.0f); // Seems about right :)
 		
 	if (Enemies.Num() <= 0) return;
 		

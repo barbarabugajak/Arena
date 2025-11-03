@@ -180,6 +180,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, BlueprintAssignable, Category = "UI")
 	FOnUIChanges ChangeAmountOfPotions;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Potions")
+	int amountOfPotions = 3;
+
 	UFUNCTION()
 	void QuitGame(const FInputActionValue& Value);
 
