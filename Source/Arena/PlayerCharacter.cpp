@@ -103,7 +103,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInput->BindAction(IA_Shield, ETriggerEvent::Completed, this, &APlayerCharacter::StopBlocking);
 		EnhancedInput->BindAction(IA_MagicRay, ETriggerEvent::Triggered, this, &APlayerCharacter::MagicRayAttack);
 		EnhancedInput->BindAction(IA_MagicProjectile, ETriggerEvent::Triggered, this, &APlayerCharacter::LaunchMagicProjectile);
-		EnhancedInput->BindAction(IA_Esc, ETriggerEvent::Triggered, this, &APlayerCharacter::QuitGame);
+		EnhancedInput->BindAction(IA_Esc, ETriggerEvent::Started, this, &APlayerCharacter::PauseGame);
 		EnhancedInput->BindAction(IA_Potion, ETriggerEvent::Started, this, &APlayerCharacter::Heal);
 		EnhancedInput->BindAction(IA_GamepadCursorX, ETriggerEvent::Triggered, this, &APlayerCharacter::GamepadCursorInput);
 		EnhancedInput->BindAction(IA_GamepadPressed, ETriggerEvent::Triggered, this, &APlayerCharacter::GamepadPressed);
@@ -167,6 +167,12 @@ void APlayerCharacter::QuitGame(const FInputActionValue& Value)
 	UKismetSystemLibrary::QuitGame(GetWorld(), PC, EQuitPreference::Quit, false);
 }
 
+void APlayerCharacter::PauseGame(const FInputActionValue& Value) {
+
+	if (!bGameActive) return;
+	GamePauseDelegate.Broadcast();
+}
+
 void APlayerCharacter::CameraRotation(const FInputActionValue& Value)
 {
 	FVector Val = Value.Get<FVector>();
@@ -204,9 +210,7 @@ void APlayerCharacter::MeleeAttack()
 	
 	bIsMeleeAttacking = true;
 	bCanMeleeAttack = false;
-	UE_LOG(LogTemp, Warning, TEXT("Attacking!"))
 	
-
 	SoundEffect.Broadcast("Melee");
 	
 }

@@ -178,6 +178,9 @@ public:
 	FOnUIChanges ShowLoseScreen;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, BlueprintAssignable, Category = "UI")
+	FOnUIChanges GamePauseDelegate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, BlueprintAssignable, Category = "UI")
 	FOnUIChanges ChangeAmountOfPotions;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Potions")
@@ -188,6 +191,9 @@ public:
 
 	UFUNCTION()
 	void Heal(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void PauseGame(const FInputActionValue& Value);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Heal")
 	bool bIsHealing;
@@ -204,6 +210,9 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	bool bIsAlive = true;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	bool bGameActive = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Juice")
 	AMagicRay* RayRef;
