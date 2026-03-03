@@ -38,7 +38,7 @@ OR
 
 ```bash
 # Clone the repo
-git clone https://github.com/yourusername/your-game-repo.git
+git clone https://github.com/barbarabugajak/Arena
 
 # Open the project in Unreal Engine
 # Build the project via Unreal Editor or your IDE
