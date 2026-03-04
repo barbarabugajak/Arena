@@ -1,9 +1,11 @@
 # 🌟 Arena 🌟 
 
 > You control a wizard fighting against waves of enemies.
-> Fight, cast rays of energy and magic projectiles - but be careful, enemies only get stronger and your health is limited
+>  Fight, cast rays of energy and magic projectiles - but be careful, enemies only get stronger and your health is limited
 
+## Gameplay
 
+https://github.com/user-attachments/assets/39ae90ff-8e45-40a0-9b75-ec2e3085daf4
 
 ## 🕹️ How To Play
 Play on itch.io: https://barbug-dev.itch.io/arena
@@ -23,7 +25,9 @@ OR
 ## 🕒 Timeline 
 - 23.06-29.06.2025: Prototype (v1)
 - 8.07-10.07: Bug fixes & gameplay enhancements (v2)
-- 11.07-13.07: Final gameplay polishes (v2.2)
+- 11.07-13.07: Gameplay polishes (v2.2)
+- 10.2025: Visual improvements (v3)
+- 11.20225: Added Gamepad support (v4)
 
 
 ## 🛠️ Getting Started
