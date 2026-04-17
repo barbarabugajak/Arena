@@ -43,8 +43,6 @@ public:
 	
 	virtual void CauseDamageToAnotherActor(AActor* OtherActor, float DamageAmount, FString DamageType) override;
 	
-	
-	
 	UFUNCTION()
 	TArray<AActor*> bIsPlayerNearby(float Distance);
 

@@ -32,8 +32,6 @@ void ADarkWizard::BeginPlay()
 	}, 1.0f, false);
 	
 	MyBPClass = MagicRayClass->GetDefaultObject()->GetClass();
-
-	
 }
 
 void ADarkWizard::Tick(float DeltaTime)
@@ -45,12 +43,9 @@ void ADarkWizard::Tick(float DeltaTime)
 	
 	AIController->SetFocus(PlayerCharacter);
 
-	
 	UE_LOG(LogTemp, Warning, TEXT("Dark wizard attacks"));
-	if (bCanMagicRayAttack & !bIsMeleeAttacking)
+	if (bCanMagicRayAttack)
 	{
 		MagicRayAttack(600.0f, 80.0f, 1.0f);
 	}
-
-
 }
